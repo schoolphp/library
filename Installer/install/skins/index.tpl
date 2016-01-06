@@ -51,6 +51,7 @@ var antixsrf = '<?php echo (isset($_SESSION['antixsrf']) ? $_SESSION['antixsrf']
 <script src="/skins/components/bower/jquery/dist/jquery.min.js" defer></script>
 <script src="/skins/components/bower/bootstrap/dist/js/bootstrap.min.js" defer></script>
 <script src="/vendor/schoolphp/library/Core/fw.min.js" defer></script>
+<script src="/skins<?php echo Core::$SKIN;?>/js/scripts.js"></script>
 <?php if(count(Core::$JS)) {echo '<script src="'.implode('"></script>'."\n".'<script src="',Core::$JS).'" defer></script>';} ?>
 </head>
 <body>
