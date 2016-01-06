@@ -358,6 +358,7 @@ class Installer
 	static function delDir() {
 		self::$step = 4;
 		self::addLog('success','Установка завершена успешно!');
+		@unlink('./install.php');
 		self::$step = 5;
 		return true;
 	}
