@@ -1,0 +1,1 @@
+<?php echo createUrl(['_module'=>'main','_page'=>'lol']); ?>

@@ -1,0 +1,71 @@
+Options -Indexes +FollowSymLinks
+AddDefaultCharset UTF-8
+php_flag display_errors ON
+php_value error_reporting -1
+php_value mbstring.internal_encoding UTF-8
+php_flag magic_quotes_gpc Off 
+php_flag magic_quotes_runtime Off 
+php_flag register_globals Off 
+php_flag output_buffering Off
+
+### UPLOADING
+php_value memory_limit 128M
+php_value upload_max_filesize 50M
+php_value post_max_size 50M
+php_value max_input_time 3000
+
+ErrorDocument 404 /404
+
+### SPECIAL FOR SOME HOSTERS
+#RewriteBase /
+
+### BASE REWRITE MOD
+RewriteEngine    on 
+RewriteCond %{REQUEST_URI} !^/forum
+
+RewriteCond %{HTTP_HOST} ^www\.(.*) [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f  
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/favicon.ico 
+RewriteCond %{REQUEST_URI} !\.(gif|jpg|png|jpeg|css|js)$
+
+#RewriteCond %{REQUEST_FILENAME} ^(.+)\.php$
+RewriteRule ^(.*)$ index.php?route=$1 [L,QSA]
+
+RewriteCond %{REQUEST_URI} !^/vendor
+RewriteCond %{REQUEST_URI} !^/forum
+
+
+RewriteCond %{REQUEST_URI} ^.+\.php$
+RewriteCond %{REQUEST_URI} !^/install.php
+RewriteCond %{REQUEST_URI} !^/temp2.php 
+RewriteCond %{REQUEST_URI} !^/index.php 
+RewriteCond %{REQUEST_FILENAME} (.*)\.(html|php)$
+RewriteCond %1.php -s [OR]
+RewriteCond %1.html -s
+RewriteRule (.*) index.php?URI=$1 [L,QSA]
+
+### DATE-ZONE CONFIG
+# http://www.webmastersucks.com/change-time-zone-with-htaccess/
+php_value date.timezone "Europe/Kiev"
+# php_value date.timezone "Europe/Moscow"
+
+### DOWNLOAD NEXT FILES
+AddType application/octet-stream .avi
+AddType application/octet-stream .mpg
+AddType application/octet-stream .mp4
+
+
+#<filesMatch "\.(css|js)$">
+#  ExpiresActive On
+#  ExpiresDefault "access plus 1 week"
+#  Header append Cache-Control "public"
+#</filesMatch>
+
+#<filesMatch "\.(ico|gif|jpg|png|woff)$">
+#  ExpiresActive On
+#  ExpiresDefault "access plus 11 month"
+#  Header append Cache-Control "public"
+#</filesMatch>

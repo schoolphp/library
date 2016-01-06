@@ -1,0 +1,29 @@
+{
+  "name": "schoolphp/library",
+  "description": "Core Classes Library",
+  "minimum-stability": "dev",
+  "preferred-install": "dev",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/schoolphp/library"
+    }
+  ],
+  "license": "MIT",
+  "type":"library",
+  "homepage": "http://school-php.com",
+  "authors": [
+    {
+      "name": "school-php.com",
+      "email": "admin@school-php.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "FW\\": "/"
+    }
+  }
+}

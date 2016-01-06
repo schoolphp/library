@@ -1,0 +1,175 @@
+<?php
+namespace FW\User;
+
+class Authorization {
+	use Authorization\Config;
+
+	function ipDefender() {
+		return true;
+		q("
+			DELETE FROM `fw_users_ip_defender`
+			WHERE `date` < NOW() - INTERVAL 15 MINUTE
+		");
+		$res = q("
+			SELECT `id`,`count`
+			FROM `fw_users_ip_defender`
+			WHERE `ip` = '".es($_SERVER['REMOTE_ADDR'])."'
+			LIMIT 1
+		");
+		if($res->num_rows) {
+			$row = $res->fetch_assoc();
+			$res->close();
+			if($row['count'] > 9) {
+				return false;
+			} else {
+				q("
+					UPDATE `fw_users_ip_defender` SET
+					`date` = NOW(),
+					`count` = `count` + 1
+					WHERE `id` = ".(int)$row['id']."
+				");
+			}
+		} else {
+			q("
+				INSERT INTO `fw_users_ip_defender` SET
+				`date` = NOW(),
+				`count` = 1,
+				`ip` = '".es($_SERVER['REMOTE_ADDR'])."'
+			");
+		}
+		return true;
+	}
+
+	function authByLoginPass($login,$password,$rememberme = false) {
+		// IP CONTROL
+		if(!$this->ipDefender()) {
+			$this->error = 'ip-defender';
+			return false;
+		}
+		
+		$res = q("
+			SELECT *
+			FROM `fw_users`
+			WHERE `login` = '".es($login)."'
+			LIMIT 1
+		");
+		if(!$res->num_rows) {
+			$this->error = 'wrong-login';
+			return false;
+		}
+		$row = $res->fetch_assoc();
+		if(!password_verify($password, $row['password'])) {
+			$this->error = 'wrong-password';
+			return false;
+		}
+		if($row['access'] != 1) {
+			if($row['access'] == 0) {
+				$this->error = 'wrong-access-confirm';
+			} else {
+				$this->error = 'wrong-access';
+			}
+			return false;
+		}
+		
+		if($rememberme) {
+			$row['hash'] = $this->rememberMe($row['id']);
+		}
+		\User::$data = $row;
+		$_SESSION['user']['id'] = $row['id'];
+		return true;
+	}
+
+	function rememberMe($id) {
+		$hash = md5($id.microtime(true).rand(1,1000000).\Core::$DOMAIN);
+		q("
+			UPDATE `fw_users` SET
+			`hash` = '".es($hash)."',
+			`browser` = '".(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '')."',
+			`ip` = '".es($_SERVER['REMOTE_ADDR'])."'
+			WHERE `id` = ".(int)$id."
+		");
+		setcookie('autologinid',$id,time()+2592000,'/',str_ireplace(array('http://','https://','www.'),'',\Core::$DOMAIN),true,true);
+		setcookie('autologinhash',$hash,time()+2592000,'/',str_ireplace(array('http://','https://','www.'),'',\Core::$DOMAIN),true,true);
+		return $hash;
+	}
+
+	function authByHash($id,$hash) {
+		if(!$this->ipDefender()) {
+			$this->error = 'ip-defender';
+			return false;
+		}
+
+		$res = q("
+			SELECT *
+			FROM `fw_users`
+			WHERE `id` = ".(int)$id."
+			  AND `hash` = '".es($hash)."'
+			LIMIT 1
+		");
+		if(!$res->num_rows) {
+			$this->error = 'wrong-hash';
+			return false;
+		}
+		$row = $res->fetch_assoc();
+		if($row['access'] != 1) {
+			if($row['access'] == 0) {
+				$this->error = 'wrong-access-confirm';
+			} else {
+				$this->error = 'wrong-access';
+			}
+			return false;
+		}
+		
+		if($this->$browser) {
+			if($row['browser'] != $_SERVER['HTTP_USER_AGENT']) {
+				$this->error = 'wrong-browser';
+				return false;
+			}
+		}
+
+		if($this->ip == 1) {
+			if($row['ip'] != $_SERVER['REMOTE_ADDR']) {
+				$this->error = 'wrong-ip';
+				return false;
+			}
+		}elseif($this->ip == 2) {
+			$correctIp = '';
+			preg_match('#(^\d+\.\d+\.)#isuU',$row['ip'],$matches);
+			if(isset($matches[1]))
+				$ipbase = $matches[1];
+
+			preg_match('#(^\d+\.\d+\.)#isuU',$row['REMOTE_ADDR'],$matches);
+			if(isset($matches[1]))
+				$ipnow = $matches[1];
+
+			if(isset($ipbase,$ipnow) && $ipbase != $ipnow) {
+				$this->error = 'wrong-ip';
+				return false;
+			}
+		}
+
+		$row['hash'] = $this->rememberMe($row['id']);
+
+		\User::$data = $row;
+		$_SESSION['user']['id'] = $row['id'];
+		return true;
+	}
+
+	public function getErrorMess() {
+		require './liblary/User/Authorization/language/'.\Core::$LANGUAGE['lang'].'.php';
+		if(isset($language[$this->error]))
+			return $language[$this->error];
+		else
+			throw new \Exception('Wrong error!');
+	}
+
+	static function logout() {
+		if(isset($_SESSION['user'])) {
+			unset($_SESSION['user']);
+		}
+		if(isset($_COOKIE['autologinid']) || isset($_COOKIE['autologinhash'])) {
+			setcookie('autologinid','',time()-3600,'/',str_ireplace(array('http://','https://','www.'),'',\Core::$DOMAIN),true,true);
+			setcookie('autologinhash','',time()-3600,'/',str_ireplace(array('http://','https://','www.'),'',\Core::$DOMAIN),true,true);
+		}
+	}
+}

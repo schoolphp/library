@@ -1,0 +1,144 @@
+html,body,div,p { margin:0; padding:0;}
+html {background-color:grey;}
+body {background-color:white; max-width:1000px; margin:0 auto; padding:30px;}
+h1 {
+	margin-bottom:20px;
+	border:2px dashed rebeccapurple;
+	padding:10px;
+	color:rebeccapurple;
+}
+.log,.php-log {
+	margin-top:20px;
+	border:1px solid gray;
+}
+.log {
+	margin-top:20px;
+	float:left;
+	width:49.5%;
+}
+.log .success {
+	color:#0a7f6d;
+}
+.log .warning {
+	color:orange;
+}
+.log .error {
+	color:#900;
+}
+
+.php-log {
+	float:right;
+	width:49.5%;
+}
+
+aside {
+	float:left;
+	width:250px;
+	border:1px solid grey;
+}
+aside div {
+	background-color:#ccc6c6;
+	padding:10px;
+	text-align:left;
+	font-size:18px;
+}
+aside div.active {
+	background-color:#00B0E8;
+}
+main {
+	float:right;
+	width:680px;
+	border:1px solid grey;
+}
+header {
+	text-align:center;
+	padding-bottom:20px;
+}
+.label-module-name {
+	border-bottom:2px dashed gainsboro;
+	padding-bottom:5px;
+	margin-bottom:5px;
+}
+.module-block {
+	background-color:white;
+	border:1px solid grey;
+	border-radius:10px;
+	box-shadow: 0 0 21px 0 rgba(0,0,0,0.75);
+	padding: 15px;
+	margin: 10px;
+}
+.module-block h3 {
+	font-size: 16px;
+	margin-left: 14px;
+	color: #3175af;
+	font-weight: bold;
+}
+.module-block-page {
+	margin: 10px 10px;
+	padding: 5px;
+	border: 1px solid #3175af;
+	border-left:10px solid #3175af;
+	border-radius:10px;
+}
+.module-block-page h4 {
+	font-size: 16px;
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+.module-block-page h5 {
+	margin-left: 17px;
+	color: #eea339;
+	font-weight: bold;
+}
+
+.module-block-get {
+	margin: -1px 15px;
+	padding: 5px;
+	border: 1px solid #eea339;
+	border-left:10px solid #eea339;
+	border-radius: 5px;
+}
+.module-block-get h4 {
+	font-size: 16px;
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+.module-block-get h5 {
+	margin-left: 32px;
+	color: #41b5d7;
+	font-weight: bold;
+}
+
+.module-block-params {
+	margin-left:30px;
+	border-left:10px solid #41b5d7;
+	padding-left:5px;
+}
+.module-block h2 {
+	font-size: 16px;
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+.module-block-options label {
+	display:inline-block;
+	width:31%;
+	padding:0;
+	margin: 0;
+}
+h1,h2,h3,h4,h5,h6 {position:relative;}
+.delete {
+	position:absolute;
+	top:0;
+	right:0;
+	color:#900;
+	text-decoration:underline;
+	font-weight:bold;
+	cursor:pointer;
+	font-size:12px;
+}
+.delete:hover {
+	text-decoration:none;
+	color:#FF0000;
+}
+td,th {padding:3px;}
+th {padding-top:10px; vertical-align:top;}
