@@ -178,6 +178,8 @@ class Installer
 		self::copyFile('/touch-icon-iphone.png');
 		self::copyFile('/touch-icon-iphone-retina.png');
 
+		self::copyFile('/config/sitemap_admin.php');
+		self::copyFile('/config/sitemap_admin_core.php');
 		self::copyFile('/modules/admin/_allmodules.php');
 		self::copyModule('main',['main'],'admin/');
 		self::copyModule('static',['404'],'admin/');
