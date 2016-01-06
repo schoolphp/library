@@ -38,23 +38,23 @@
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
-<link rel="apple-touch-icon" href="touch-icon-iphone.png">
-<link rel="apple-touch-icon" sizes="76x76" href="touch-icon-ipad.png">
-<link rel="apple-touch-icon" sizes="120x120" href="touch-icon-iphone-retina.png">
-<link rel="apple-touch-icon" sizes="152x152" href="touch-icon-ipad-retina.png">
+<link rel="apple-touch-icon" href="/touch-icon-iphone.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/touch-icon-ipad.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/touch-icon-iphone-retina.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/touch-icon-ipad-retina.png">
 
 <!--[if lt IE 9]>
-  <script src="/skins/js/html5shiv.js"></script>
-  <script src="/skins/js/respond.min.js"></script>
+<script src="/skins/components/bower/html5shiv/dist/html5shiv.min.js" defer></script>
+<script src="/skins/components/bower/respond/dest/respond.min.js" defer></script>
 <![endif]-->
 
 <link href="/skins/components/bower/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="/skins/components/bower/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="/skins<?php echo Core::$SKIN;?>/css/admin.css" rel="stylesheet">
+
 <script src="/skins/components/bower/jquery/dist/jquery.min.js"></script>
 <script src="/skins/components/bower/bootstrap/dist/js/bootstrap.min.js"></script>
-
-<link href="/skins<?php echo Core::$SKIN;?>/css/admin.css" rel="stylesheet">
-<script src="/skins<?php echo Core::$SKIN;?>/js/fw.js"></script>
+<script src="/vendor/schoolphp/library/Core/fw.min.js" defer></script>
 <script src="/skins<?php echo Core::$SKIN;?>/js/scripts.js"></script>
 
 <?php if(count(Core::$CSS)) {echo '<link href="'.implode('" rel="stylesheet">'."\n".'<link href="',Core::$CSS).'" rel="stylesheet">';} ?>

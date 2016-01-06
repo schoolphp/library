@@ -45,12 +45,12 @@
 var antixsrf = '<?php echo (isset($_SESSION['antixsrf']) ? $_SESSION['antixsrf'] : 'no'); ?>';
 </script>
 <!--[if lt IE 9]>
-<script src="/skins/js/html5shiv.js" defer></script>
-<script src="/skins/js/respond.min.js" defer></script>
+<script src="/skins/components/bower/html5shiv/dist/html5shiv.min.js" defer></script>
+<script src="/skins/components/bower/respond/dest/respond.min.js" defer></script>
 <![endif]-->
 <script src="/skins/components/bower/jquery/dist/jquery.min.js" defer></script>
 <script src="/skins/components/bower/bootstrap/dist/js/bootstrap.min.js" defer></script>
-<script src="/skins<?=Core::$SKIN;?>/js/fw.min.js" defer></script>
+<script src="/vendor/schoolphp/library/Core/fw.min.js" defer></script>
 <?php if(count(Core::$JS)) {echo '<script src="'.implode('"></script>'."\n".'<script src="',Core::$JS).'" defer></script>';} ?>
 </head>
 <body>
