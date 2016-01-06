@@ -41,7 +41,6 @@ class Installer
 				if(file_put_contents(self::$basedir.$file, $temp) !== false) {
 					self::addLog('success', 'Файл `'.$file.'` создан');
 				} else {
-					echo '<hr>'.self::$basedir.$file.'<hr>'.self::$installDir.$file.'<hr>';
 					self::addLog('error', 'Файл `'.$file.'` не удалось создать!');
 				}
 			}
