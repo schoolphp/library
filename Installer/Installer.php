@@ -89,6 +89,7 @@ class Installer
 		self::makeDir('/modules/admin');
 		self::makeDir('/cache/block');
 		self::makeDir('/cache/file');
+		self::makeDir('/logs');
 
 		if(!file_exists(self::$basedir.'/config/config.php')) {
 			if(!isset($_SESSION['created'],$_SESSION['db-login'],$_SESSION['db-pass'],$_SESSION['db-local'],
@@ -166,6 +167,17 @@ class Installer
 		self::copyFile('/skins/js/scripts.js');
 		self::copyFile('/skins/js/scripts.min.js');
 
+		self::copyFile('/logs/js.log');
+		self::copyFile('/logs/my.log');
+		self::copyFile('/logs/mysql.log');
+		self::copyFile('/logs/php.log');
+		self::copyFile('/logs/slowquery.log');
+
+		self::copyFile('/favicon.ico');
+		self::copyFile('/touch-icon-ipad.png');
+		self::copyFile('/touch-icon-ipad-retina.png');
+		self::copyFile('/touch-icon-iphone.png');
+		self::copyFile('/touch-icon-iphone-retina.png');
 
 		self::copyFile('/modules/admin/_allmodules.php');
 		self::copyModule('main',['main'],'admin/');
