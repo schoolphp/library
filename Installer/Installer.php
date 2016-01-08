@@ -89,6 +89,7 @@ class Installer
 		self::makeDir('/cache/block');
 		self::makeDir('/cache/file');
 		self::makeDir('/logs');
+		self::makeDir('/uploads/tmp');
 
 		if(!file_exists(self::$basedir.'/config/config.php')) {
 			if(!isset($_SESSION['created'],$_SESSION['db-login'],$_SESSION['db-pass'],$_SESSION['db-local'],
@@ -182,6 +183,7 @@ class Installer
 		self::copyFile('/config/sitemap_admin_core.php');
 		self::copyFile('/modules/admin/_allmodules.php');
 		self::copyModule('main',['main'],'admin/');
+		self::copyModule('modules',['main'],'admin/');
 		self::copyModule('static',['404'],'admin/');
 
 		return true;
