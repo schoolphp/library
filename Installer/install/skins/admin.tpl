@@ -56,7 +56,7 @@
 </head>
 <body>
 <?php
-if(!empty(User::$data['role']) && User::$data['role'] === 'admin') { /* Login */ ?>
+if(isAdmin()) { /* Login */ ?>
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
