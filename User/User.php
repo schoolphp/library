@@ -2,14 +2,16 @@
 namespace FW\User;
 
 class User {
+	static $id = 0;
+	static $login = '';
+	static $role = '';
+	static protected $datas = ['id','role','login'];
 	static $data = NULL;
-	static $access = NULL;
-	static $error = '';
 	static $autoupdate = true;
 	static function Start() {
 		if(isset($_SESSION['user']['id'])) {
 			$res = q("
-				SELECT *
+				SELECT `access`".(count(self::$datas) ? '`'.explode('`,`',self::$datas).'`' : '')."
 				FROM `fw_users`
 				WHERE `id` = ".(int)$_SESSION['user']['id']."
 			");
@@ -23,7 +25,13 @@ class User {
 				$_SESSION['error'] = 'no-access';
 				redirect('/');
 			}
-			self::$data = $row;
+			foreach(self::$datas as $k=>$v) {
+				self::$$v = $row[$v];
+				unset($row[$v]);
+			}
+			if(count($row)) {
+				self::$data = $row;
+			}
 		} elseif(isset($_COOKIE['autologinid'],$_COOKIE['autologinhash'])) {
 			$auth = new Authorization;
 			if(!$auth->authByHash($_COOKIE['autologinid'],$_COOKIE['autologinhash'])) {
@@ -31,7 +39,7 @@ class User {
 				redirect('/');
 			}
 		}
-		
+
 		if(!empty(self::$data['id']) && !empty(self::$autoupdate)) {
 			q("
 				UPDATE `fw_users` SET

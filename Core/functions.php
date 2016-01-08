@@ -67,6 +67,11 @@ function myAuthoload($class) {
 }
 spl_autoload_register('myAuthoload');
 
+/**
+ * @param $query
+ * @param int $key
+ * @return mysqli_result;
+ */
 function q($query,$key = 0) {
 	if(Core::$EVENTS) \FW\Event\Event::trigger('BeforeQuery');
 	$res = \FW\DB\DB::_($key)->query($query);
@@ -230,7 +235,7 @@ function getEng($text) {
 		"ы"=>"yi","ь"=>"'","э"=>"e","ю"=>"yu","я"=>"ya",
 		"ё"=>"e","Ё"=>'E',
 		"."=>"-"," "=>"-","?"=>"_","/"=>"_","\\"=>"_",
-		"*"=>"-",":"=>"_","*"=>"_","\""=>"_","<"=>"_",
+		"*"=>"-",":"=>"_","\""=>"_","<"=>"_",
 		">"=>"-","|"=>"-"
 	);
 	return mb_strtolower(strtr($text,$tr),'UTF-8');
@@ -239,8 +244,7 @@ function getEng($text) {
 function myHash($var) {
 	$salt = 'mmomoj';
 	$salt2 = 'wamfwmlo';
-	$var = crypt(md5($var.$salt),$salt2);
-	return $var;
+	return crypt(md5($var.$salt),$salt2);
 }
 
 function doError($key) {
@@ -248,7 +252,7 @@ function doError($key) {
 }
 
 function isAdmin() {
-	if(isset($_SESSION['user']['id']) && $_SESSION['user']['id'] == 1) {
+	if(!empty(User::$role) && User::$role == 'admin') {
 		return true;
 	}
 	return false;

@@ -25,7 +25,11 @@ $res->close(); // Очищаем результат выборки
 class DB {
 	static public $mysqli = array();
 	static public $connect = array();
-	
+
+	/**
+	 * @param int $key
+	 * @return \mysqli;
+	 */
 	static public function _($key = 0) {
 		if(!isset(self::$mysqli[$key])) {
 			if(!isset(self::$connect['server']))

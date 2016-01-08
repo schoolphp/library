@@ -21,5 +21,7 @@
 		</div>
 	</form>
 <?php } else { ?>
-	<h1>Добро пожаловать в админку</h1>
+	<div class="admin-container" style="min-height:400px;">
+		<h1>Добро пожаловать в админку!</h1>
+	</div>
 <?php } ?>
