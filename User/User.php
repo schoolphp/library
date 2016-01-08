@@ -8,12 +8,16 @@ class User {
 	static protected $datas = ['id','role','login'];
 	static $data = NULL;
 	static $autoupdate = true;
-	static function Start() {
-		if(isset($_SESSION['user']['id'])) {
+	static function Start($auth = []) {
+		if(count($auth)) {
+			$where = [];
+			foreach($auth as $k=>$v) {
+				$where[] = "`".es($k)."` = '".es($v)."'";
+			}
 			$res = q("
-				SELECT `access`".(count(self::$datas) ? '`'.explode('`,`',self::$datas).'`' : '')."
+				SELECT `access`".(count(self::$datas) ? '`'.implode('`,`',self::$datas).'`' : '')."
 				FROM `fw_users`
-				WHERE `id` = ".(int)$_SESSION['user']['id']."
+				WHERE ".implode(" AND ",$where)."
 			");
 			if(!$res->num_rows) {
 				Authorization::logout();
