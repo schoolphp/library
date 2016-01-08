@@ -296,7 +296,7 @@ class Installer
 			if(!$link->query("
 			INSERT INTO `fw_users` SET
 			`login` = '".mysqli_real_escape_string($link, $_SESSION['login'])."',
-			`password` = '".mysqli_real_escape_string($link, $_SESSION['password'])."',
+			`password` = '".password_hash($_SESSION['password'],PASSWORD_DEFAULT)."',
 			`date` = NOW(),
 			`access` = 1,
 			`role` = 'admin'
