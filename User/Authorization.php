@@ -156,7 +156,7 @@ class Authorization {
 	}
 
 	public function getErrorMess() {
-		require './liblary/User/Authorization/language/'.\Core::$LANGUAGE['lang'].'.php';
+		require __DIR__.'/Authorization/language/'.\Core::$LANGUAGE['lang'].'.php';
 		if(isset($language[$this->error]))
 			return $language[$this->error];
 		else
