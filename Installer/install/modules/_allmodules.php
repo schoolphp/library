@@ -9,7 +9,7 @@ function my_session_start() {
 		return true;
 	}
 
-   if (!preg_match('/^[a-z0-9]{32}$/', $sessid)) {
+	if (!preg_match('/^[-,a-zA-Z0-9]{1,128}$/', $sessid)) {
 		return false;
 	}
 	session_start();
@@ -23,7 +23,6 @@ if (!my_session_start()) {
 }
 
 class User extends \FW\User\User {}
-//include './library/User/User.php';
 User::start();
 
 if(!isset($_SESSION['antixsrf'])) {
