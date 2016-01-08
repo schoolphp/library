@@ -613,3 +613,17 @@ footer a {
 	padding:20px;
 	border-top:1px solid #e6e6e6;
 }
+
+.admin-container {
+	margin:10px 5px;
+	background-color:white; text-align:center;
+	border:1px solid #dddddd;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.admin-container h1 {
+	border-bottom: 3px dashed #dddddd;
+	padding-bottom: 10px;
+	color:#333333;
+}
