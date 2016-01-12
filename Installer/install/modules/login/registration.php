@@ -42,7 +42,7 @@ $form->create(array(
 	),
 ));
 if($form->issend()) {
-	$reg = new Registration;
+	$reg = new \FW\User\Registration;
 	if($reg->regist($_POST['login'],$_POST['password'],$_POST['email'])) {
 		$status = 'ok';
 	} else {

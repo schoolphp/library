@@ -1,4 +1,4 @@
-<?php if(empty(User::$data['role']) || User::$data['role'] !== 'admin') { /* Login */ ?>
+<?php if(!isAdmin()) { /* Login */ ?>
 	<form action="/<?=$_GET['route']; ?>" method="post" class="admin-auth-form">
 		<div class="admin-auth-form-title">Доступ к админскому разделу закрыт</div>
 		<div class="admin-auth-form-body">

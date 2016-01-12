@@ -1,3 +1,3 @@
 <?php
-User\Authorization::logout();
+\FW\User\Authorization::logout();
 redirect();
