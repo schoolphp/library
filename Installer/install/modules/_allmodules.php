@@ -23,7 +23,7 @@ if (!my_session_start()) {
 }
 
 class User extends \FW\User\User {}
-User::start(isset($_SESSION['id']) ? ['id' => (int)$_SESSION['id']] : []);
+User::start(isset($_SESSION['user']['id']) ? ['id' => (int)$_SESSION['user']['id']] : []);
 
 if(!isset($_SESSION['antixsrf'])) {
 	$_SESSION['antixsrf'] = md5(time().$_SERVER['REMOTE_ADDR'].(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : rand(1,99999)));

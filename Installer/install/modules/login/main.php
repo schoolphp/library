@@ -1,7 +1,7 @@
 <?php
 $status = '';
 if(isset($_POST['login'],$_POST['pass'])) {
-	$auth = new User\Authorization;
+	$auth = new \FW\User\Authorization;
 	$remember = (isset($_POST['checkbox']['remember'])? true : false);
 	if($auth->authByLoginPass($_POST['login'],$_POST['pass'],true)) {
 		$status = 'ok';

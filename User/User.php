@@ -15,7 +15,7 @@ class User {
 				$where[] = "`".es($k)."` = '".es($v)."'";
 			}
 			$res = q("
-				SELECT `access`".(count(self::$datas) ? '`'.implode('`,`',self::$datas).'`' : '')."
+				SELECT `access`".(count(self::$datas) ? ',`'.implode('`,`',self::$datas).'`' : '')."
 				FROM `fw_users`
 				WHERE ".implode(" AND ",$where)."
 			");
