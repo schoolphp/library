@@ -78,6 +78,7 @@ if(isAdmin()) { /* Login */ ?>
               <li><a href="#">Установка внешних модулей</a></li>
             </ul>
           </li>
+          <li><a href="/login/exit">Выход</a></li>
         </ul>
         <form class="navbar-form navbar-right">
           <input type="text" class="form-control" placeholder="Search...">
