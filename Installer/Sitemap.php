@@ -77,30 +77,53 @@ class Sitemap
 	static function generateDiv($sitemap) {
 		if(count($sitemap)) {
 			foreach($sitemap as $k => $v) {
-				mkdir(self::$basedir.'/modules/'.$k.'/view', 0775, true);
+				if(!file_exists(self::$basedir.'/modules/'.$k.'/view')) {
+					mkdir(self::$basedir.'/modules/'.$k.'/view', 0775, true);
+				}
 
-				if(isset($v['/Options']['before'])) {
+				if(isset($v['/Options']['before']) && !file_exists(self::$basedir.'/modules/'.$k.'/view/_before.tpl')) {
 					file_put_contents(self::$basedir.'/modules/'.$k.'/view/_before.tpl', '');
+				} elseif(!isset($v['/Options']['before']) && file_exists(self::$basedir.'/modules/'.$k.'/view/_before.tpl')) {
+					unlink(self::$basedir.'/modules/'.$k.'/view/_before.tpl');
 				}
-				if(isset($v['/Options']['after'])) {
+
+				if(isset($v['/Options']['after']) && !file_exists(self::$basedir.'/modules/'.$k.'/view/_after.tpl')) {
 					file_put_contents(self::$basedir.'/modules/'.$k.'/view/_after.tpl', '');
+				} elseif(!isset($v['/Options']['after']) && file_exists(self::$basedir.'/modules/'.$k.'/view/_after.tpl')){
+					unlink(self::$basedir.'/modules/'.$k.'/view/_after.tpl');
 				}
-				if(isset($v['/Options']['controller'])) {
-					mkdir(self::$basedir.'/modules/controller', 0775);
+
+				if(isset($v['/Options']['controller']) && !file_exists(self::$basedir.'/modules/'.$k.'/controller/controller.php')) {
+					if(!file_exists(self::$basedir.'/modules/controller')) {
+						mkdir(self::$basedir.'/modules/controller', 0775);
+					}
 					file_put_contents(self::$basedir.'/modules/'.$k.'/controller/controller.php', '');
+				} elseif(!isset($v['/Options']['controller']) && file_exists(self::$basedir.'/modules/'.$k.'/controller')) {
+					\FW\Form\FileSystem::delTree(self::$basedir.'/modules/'.$k.'/controller');
 				}
-				if(isset($v['/Options']['config'])) {
-					mkdir(self::$basedir.'/modules/config', 0775);
+
+				if(isset($v['/Options']['config']) && !file_exists(self::$basedir.'/modules/'.$k.'/config/config.php')) {
+					if(!file_exists(self::$basedir.'/modules/config')) {
+						mkdir(self::$basedir.'/modules/config', 0775);
+					}
 					file_put_contents(self::$basedir.'/modules/'.$k.'/config/config.php', '');
+				} elseif(!isset($v['/Options']['config']) && file_exists(self::$basedir.'/modules/'.$k.'/config/config.php')) {
+					unlink(self::$basedir.'/modules/'.$k.'/config/config.php');
 				}
-				if(isset($v['/Options']['allpages'])) {
+
+				if(isset($v['/Options']['allpages']) && !file_exists(self::$basedir.'/modules/'.$k.'/_allpages.php')) {
 					file_put_contents(self::$basedir.'/modules/'.$k.'/_allpages.php', '');
+				} elseif(!isset($v['/Options']['allpages']) && file_exists(self::$basedir.'/modules/'.$k.'/_allpages.php')) {
+					unlink(self::$basedir.'/modules/'.$k.'/_allpages.php');
 				}
 
 				if(isset($v['/Options']['sitemap'])) {
 					unset($v['/Options']['sitemap']);
 					unset($sitemap[$k]);
-					mkdir(self::$basedir.'/modules/sitemap', 0775);
+					if(!file_exists(self::$basedir.'/modules/sitemap')) {
+						mkdir(self::$basedir.'/modules/sitemap', 0775);
+					}
+
 					$temp = '<?php
 return [
   \''.$k.'\' => '.preg_replace('#\[\s+\]#iu', '[]', preg_replace('#\=\>\s*array \(#iu', '=> [', str_replace('),', '],', var_export($v, 1)))).'
