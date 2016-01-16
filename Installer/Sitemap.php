@@ -94,8 +94,8 @@ class Sitemap
 				}
 
 				if(isset($v['/Options']['controller']) && !file_exists(self::$basedir.'/modules/'.$k.'/controller/controller.php')) {
-					if(!file_exists(self::$basedir.'/modules/controller')) {
-						mkdir(self::$basedir.'/modules/controller', 0775);
+					if(!file_exists(self::$basedir.'/modules/'.$k.'/controller')) {
+						mkdir(self::$basedir.'/modules/'.$k.'/controller', 0775);
 					}
 					file_put_contents(self::$basedir.'/modules/'.$k.'/controller/controller.php', '');
 				} elseif(!isset($v['/Options']['controller']) && file_exists(self::$basedir.'/modules/'.$k.'/controller')) {
@@ -103,8 +103,8 @@ class Sitemap
 				}
 
 				if(isset($v['/Options']['config']) && !file_exists(self::$basedir.'/modules/'.$k.'/config/config.php')) {
-					if(!file_exists(self::$basedir.'/modules/config')) {
-						mkdir(self::$basedir.'/modules/config', 0775);
+					if(!file_exists(self::$basedir.'/modules/'.$k.'/config')) {
+						mkdir(self::$basedir.'/modules/'.$k.'/config', 0775);
 					}
 					file_put_contents(self::$basedir.'/modules/'.$k.'/config/config.php', '');
 				} elseif(!isset($v['/Options']['config']) && file_exists(self::$basedir.'/modules/'.$k.'/config/config.php')) {
