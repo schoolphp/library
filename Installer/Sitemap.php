@@ -120,8 +120,8 @@ class Sitemap
 				if(isset($v['/Options']['sitemap'])) {
 					unset($v['/Options']['sitemap']);
 					unset($sitemap[$k]);
-					if(!file_exists(self::$basedir.'/modules/sitemap')) {
-						mkdir(self::$basedir.'/modules/sitemap', 0775);
+					if(!file_exists(self::$basedir.'/modules/'.$k.'/sitemap')) {
+						mkdir(self::$basedir.'/modules/'.$k.'/sitemap', 0775);
 					}
 
 					$temp = '<?php
