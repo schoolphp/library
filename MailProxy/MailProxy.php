@@ -4,8 +4,8 @@ namespace FW\MailProxy;
 class MailProxy extends \PHPMailer\PHPMailer\PHPMailer {
     public function __construct($exceptions = false) {
 		$this->CharSet = 'UTF-8';
-		$this->setFrom(Core::$NOREPLY, Core::$SITENAME);
-		$this->addReplyTo(Core::$NOREPLY, Core::$SITENAME);
+		$this->setFrom(\Core::$NOREPLY, \Core::$SITENAME);
+		$this->addReplyTo(\Core::$NOREPLY, \Core::$SITENAME);
         return parent::__construct($exceptions);
     }
 

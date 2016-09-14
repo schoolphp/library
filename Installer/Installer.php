@@ -89,6 +89,7 @@ class Installer
 		self::makeDir('/cache/block');
 		self::makeDir('/cache/file');
 		self::makeDir('/logs');
+		self::makeDir('/library');
 		self::makeDir('/uploads/tmp');
 
 		if(!file_exists(self::$basedir.'/config/config.php')) {
