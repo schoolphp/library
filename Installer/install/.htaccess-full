@@ -1,12 +1,29 @@
 Options -Indexes +FollowSymLinks
 AddDefaultCharset UTF-8
-php_flag display_errors ON
-php_value error_reporting -1
 php_value mbstring.internal_encoding UTF-8
-php_flag magic_quotes_gpc Off 
-php_flag magic_quotes_runtime Off 
-php_flag register_globals Off 
 php_flag output_buffering Off
+
+### ERROR BLOCK
+php_flag display_errors On
+php_flag display_startup_errors Off
+php_flag html_errors off
+php_flag log_errors on
+php_flag ignore_repeated_errors off
+php_flag ignore_repeated_source off
+php_flag report_memleaks on
+php_flag track_errors on
+php_value error_reporting -1
+php_value docref_root 0
+php_value docref_ext 0
+php_value log_errors_max_len 0
+
+### TEST IT
+php_value error_log  /home/path/public_html/domain/PHP_errors.log
+
+### OLD PHP VERSIONS
+php_flag magic_quotes_gpc Off
+php_flag magic_quotes_runtime Off
+php_flag register_globals Off
 
 ### UPLOADING
 php_value memory_limit 128M
@@ -36,7 +53,6 @@ RewriteRule ^(.*)$ index.php?route=$1 [L,QSA]
 
 RewriteCond %{REQUEST_URI} !^/vendor
 RewriteCond %{REQUEST_URI} !^/forum
-
 
 RewriteCond %{REQUEST_URI} ^.+\.php$
 RewriteCond %{REQUEST_URI} !^/install.php
