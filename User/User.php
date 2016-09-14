@@ -31,7 +31,7 @@ class User {
 			}
 			foreach(self::$datas as $k=>$v) {
 				self::$$v = $row[$v];
-				unset($row[$v]);
+				// unset($row[$v]); -- Раскомментировать после обновления функционала на сайте
 			}
 			if(count($row)) {
 				self::$data = $row;
