@@ -31,7 +31,7 @@ class User {
 				redirect('/');
 			}
 			foreach($called_class::$datas as $k=>$v) {
-				self::$$v = $row[$v];
+				$called_class::$$v = $row[$v];
 				// unset($row[$v]); -- Раскомментировать после обновления функционала на сайте
 			}
 			if(count($row)) {
