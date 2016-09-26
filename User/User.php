@@ -9,13 +9,14 @@ class User {
 	static $data = NULL;
 	static $autoupdate = true;
 	static function Start($auth = []) {
+		$called_class = get_called_class();
 		if(count($auth)) {
 			$where = [];
 			foreach($auth as $k=>$v) {
 				$where[] = "`".es($k)."` = '".es($v)."'";
 			}
 			$res = q("
-				SELECT `access`".(count(self::$datas) ? ',`'.implode('`,`',self::$datas).'`' : '')."
+				SELECT `access`".(count($called_class::$datas) ? ',`'.implode('`,`',$called_class::$datas).'`' : '')."
 				FROM `fw_users`
 				WHERE ".implode(" AND ",$where)."
 			");
@@ -29,7 +30,7 @@ class User {
 				$_SESSION['error'] = 'no-access';
 				redirect('/');
 			}
-			foreach(self::$datas as $k=>$v) {
+			foreach($called_class::$datas as $k=>$v) {
 				self::$$v = $row[$v];
 				// unset($row[$v]); -- Раскомментировать после обновления функционала на сайте
 			}
