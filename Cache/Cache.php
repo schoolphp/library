@@ -19,12 +19,12 @@ class Cache {
 	static function connect($driver = false, $options = array()) {
 		if($driver) {
 			if(!in_array($driver,self::$driver_allow)) {
-				throw new Exception('Недопустимый драйвер');
+				throw new \Exception('Недопустимый драйвер');
 			}
 			self::$driver = $driver;
 		}
 		if(!isset(self::$instance[self::$driver])) {
-			$class = 'Cache\\'.self::$driver.'\\'.self::$driver;
+			$class = '\\'.__NAMESPACE__.'\\'.self::$driver.'\\'.self::$driver;
 			self::$instance[self::$driver] = new $class($options);
 		}
 		return self::$instance[self::$driver];

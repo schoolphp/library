@@ -120,7 +120,7 @@ class Authorization {
 			return false;
 		}
 		
-		if($this->$browser) {
+		if($this->browser) {
 			if($row['browser'] != $_SERVER['HTTP_USER_AGENT']) {
 				$this->error = 'wrong-browser';
 				return false;
