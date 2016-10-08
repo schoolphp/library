@@ -1,14 +1,14 @@
 <?php
 namespace FW\SessionMysqlHandler;
 
-class SessionMysqlHandler implements SessionHandlerInterface {
+class SessionMysqlHandler implements \SessionHandlerInterface {
     public $table = 'fw_sessions';
 	public $expires = '24 MINUTE';
 	public $engine = 'InnoDB'; // Alternative - MEMORY
-	public $control = array(
+	public $control = [
 		'ip' => true,
 		'useragent' => true, 
-	);
+	];
 
 	public function install() {
         q("
@@ -72,7 +72,7 @@ class SessionMysqlHandler implements SessionHandlerInterface {
 				$this->destroy($id);
 				return false;
 			} elseif($this->control['useragent'] === true && (!isset($_SERVER['HTTP_USER_AGENT']) || $row['useragent'] != $_SERVER['HTTP_USER_AGENT'])) {
-				destroy($id);
+				$this->destroy($id);
 				return false;
 			}
 			q("

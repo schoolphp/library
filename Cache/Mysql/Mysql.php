@@ -5,9 +5,8 @@ class Mysql {
 	
 	private $expire = 2678400;
 	private $delstep = 10000;
-	private $table = 'cache_data'; 
 
-	public function __construct($options = array()) {
+	public function __construct($options = []) {
 		foreach($options as $k=>$v) {
 			if(property_exists($this, $k)) {
 				if(gettype($v) === gettype($this->$k)) {

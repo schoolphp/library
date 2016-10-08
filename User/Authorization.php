@@ -5,7 +5,6 @@ class Authorization {
 	use Authorization\Config;
 
 	function ipDefender() {
-		return true;
 		q("
 			DELETE FROM `fw_users_ip_defender`
 			WHERE `date` < NOW() - INTERVAL 15 MINUTE
@@ -88,17 +87,18 @@ class Authorization {
 			`ip` = '".es($_SERVER['REMOTE_ADDR'])."'
 			WHERE `id` = ".(int)$id."
 		");
-		setcookie('autologinid',$id,time()+2592000,'/',str_ireplace(array('http://','https://','www.'),'',\Core::$DOMAIN),true,true);
-		setcookie('autologinhash',$hash,time()+2592000,'/',str_ireplace(array('http://','https://','www.'),'',\Core::$DOMAIN),true,true);
+		setcookie('autologinid',$id,time()+2592000,'/',str_ireplace(['http://','https://','www.'],'',\Core::$DOMAIN),true,true);
+		setcookie('autologinhash',$hash,time()+2592000,'/',str_ireplace(['http://','https://','www.'],'',\Core::$DOMAIN),true,true);
 		return $hash;
 	}
 
 	function authByHash($id,$hash) {
+/*
 		if(!$this->ipDefender()) {
 			$this->error = 'ip-defender';
 			return false;
 		}
-
+*/
 		$res = q("
 			SELECT *
 			FROM `fw_users`
@@ -133,7 +133,6 @@ class Authorization {
 				return false;
 			}
 		}elseif($this->ip == 2) {
-			$correctIp = '';
 			preg_match('#(^\d+\.\d+\.)#isuU',$row['ip'],$matches);
 			if(isset($matches[1]))
 				$ipbase = $matches[1];
@@ -168,8 +167,8 @@ class Authorization {
 			unset($_SESSION['user']);
 		}
 		if(isset($_COOKIE['autologinid']) || isset($_COOKIE['autologinhash'])) {
-			setcookie('autologinid','',time()-3600,'/',str_ireplace(array('http://','https://','www.'),'',\Core::$DOMAIN),true,true);
-			setcookie('autologinhash','',time()-3600,'/',str_ireplace(array('http://','https://','www.'),'',\Core::$DOMAIN),true,true);
+			setcookie('autologinid','',time()-3600,'/',str_ireplace(['http://','https://','www.'],'',\Core::$DOMAIN),true,true);
+			setcookie('autologinhash','',time()-3600,'/',str_ireplace(['http://','https://','www.'],'',\Core::$DOMAIN),true,true);
 		}
 	}
 }

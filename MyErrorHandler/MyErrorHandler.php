@@ -4,11 +4,11 @@ use \Core;
 
 class MyErrorHandler {
 	static public $key = 0;
-	static public $user_err = array(256,512,1024);
-	static public $tips = array(
+	static public $user_err = [256,512,1024];
+	static public $tips = [
 		'main' => 'main',
 		'Undefined variable' => 'undefined_variable',
-	);
+	];
 	static public function handler($errno, $errstr, $errfile, $errline) {
 
 		if(self::$key > 3) {
@@ -17,9 +17,9 @@ class MyErrorHandler {
 			++self::$key;
 		}
 
-		include __DIR__.'/language/'.Core::$LANGUAGE['lang'].'.php';
+		$text = include __DIR__.'/language/'.Core::$LANGUAGE['lang'].'.php';
 
-		$errors = array(1 => 'Error',2 => 'Warning',4 => 'Parse',8 => 'Notice',16 => 'Core error',32 => 'Core warning',64 => 'Complite error',128 => 'Complite warning',256 => 'User Error',512 => 'User Warning',1024 => 'User Notice',2048 => 'Strict',4096 => 'Recoverable error',8192 => 'Deprecated',16384 => 'User Deprecated',32767 => 'All');
+		$errors = [1 => 'Error',2 => 'Warning',4 => 'Parse',8 => 'Notice',16 => 'Core error',32 => 'Core warning',64 => 'Complite error',128 => 'Complite warning',256 => 'User Error',512 => 'User Warning',1024 => 'User Notice',2048 => 'Strict',4096 => 'Recoverable error',8192 => 'Deprecated',16384 => 'User Deprecated',32767 => 'All'];
 
 		$trace = '';
 		if(Core::$ERRORS['trace']) {
@@ -76,9 +76,9 @@ class MyErrorHandler {
 			echo '<div style="background-color:white; border:2px dotted red; padding:10px;">
 			  <div style="background-color:#F0D9DA;">'.$errors[$errno].': ['.$errstr.'] '.$text['in_file'].' '.$errfile.' '.$text['on_line'].' '.$errline.'</div>
 			  <div align="center">
-				<a href="javascript;" onclick="document.getElementById(\'randerrorkeyGLOBALS'.($randomkey = rand(1,9999)).'\').style.display=\'block\'; return false;">'.$text['show'].' $GLOBALS</a> |
-				<a href="javascript;" onclick="document.getElementById(\'randerrorkeyDEBUG'.($randomkey).'\').style.display=\'block\'; return false;">'.$text['show'].' Debug Backtrace</a> |
-				<a href="javascript;" onclick="document.getElementById(\'randerrorkeyTIP'.($randomkey).'\').style.display=\'block\'; return false;">'.$text['show_tips'].'</a>
+				<a href="javascript:void(0)" onclick="document.getElementById(\'randerrorkeyGLOBALS'.($randomkey = rand(1,9999)).'\').style.display=\'block\'; return false;">'.$text['show'].' $GLOBALS</a> |
+				<a href="javascript:void(0)" onclick="document.getElementById(\'randerrorkeyDEBUG'.($randomkey).'\').style.display=\'block\'; return false;">'.$text['show'].' Debug Backtrace</a> |
+				<a href="javascript:void(0)" onclick="document.getElementById(\'randerrorkeyTIP'.($randomkey).'\').style.display=\'block\'; return false;">'.$text['show_tips'].'</a>
 			  </div>
 			  <div style="display:none; padding:5px; border: 1px dotted orange;" id="randerrorkeyGLOBALS'.$randomkey.'"><h1>GLOBALS:</h1><pre>'.htmlspecialchars(print_r($GLOBALS,1)).'</pre></div>
 			  <div style="display:none; padding:5px; border: 1px dotted orange;" id="randerrorkeyDEBUG'.$randomkey.'"><h1>DEBUG BACKTRACE</h1><pre>';
@@ -114,5 +114,6 @@ class MyErrorHandler {
 		/* Не запускаем внутренний обработчик ошибок PHP
 		return true;
 		*/
+		return null;
 	}
 }

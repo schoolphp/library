@@ -2,19 +2,19 @@
 namespace \FW\Trace;
 
 class Trace {
-    static $data = array();
+    static $data = [];
 	static $start = 0;
 	static $dateformat = 'Y-m-d H:i:s'; // '' empty for Unix Timestamp
 
     static function set() {
 		$info = debug_backtrace();
-		self::$data[] = array(
+		self::$data[] = [
 			'time' => time(),
 			'microtime' => microtime(true),
 			'text' => (count($info[0]['args']) ? $info[0]['args'] : '' ),
 			'file' => $info[0]['file'],
 			'line' => $info[0]['line'],
-		);
+		];
     }
 
     static function get($stop = false) {

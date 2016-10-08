@@ -5,7 +5,7 @@ class File {
 	
 	private $expire = 2678400;
 
-	public function __construct($options = array()) {
+	public function __construct($options = []) {
 		foreach($options as $k=>$v) {
 			if(property_exists($this, $k)) {
 				if(gettype($v) === gettype($this->$k)) {
@@ -20,7 +20,7 @@ class File {
 		if(!$expire) {
 			$expire = $this->expire;
 		}
-		file_put_contents('./cache/file/'.$key,serialize(array('data'=>$value,'expire'=>time()+$expire)));
+		file_put_contents('./cache/file/'.$key,serialize(['data'=>$value,'expire'=>time()+$expire]));
 		return true;
 	}
 

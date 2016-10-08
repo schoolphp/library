@@ -3,7 +3,7 @@ namespace FW\Event;
 
 class Event {
 	static $class = '\FW\Event\EventsHandler';
-	static $events = array();
+	static $events = [];
 	static $handler = false;
 	static function setEventHandler($class) {
 		self::$class = $class;
