@@ -2,17 +2,17 @@
 namespace FW\Timer;
 
 class Timer {
-	static $start = array();
-	static $step = array();
-	static $last = array();
+	static $start = [];
+	static $step = [];
+	static $last = [];
 	
 	static function start($key = 0,$title = '') {
 		if(empty($key)) {
 			$key = (isset(self::$last['key']) ? self::$last['key'] : 0);
 		}
 		self::$start[$key] = microtime(true);
-		self::$step[$key] = array();
-		self::$last = array('key'=>$key,'title'=>$title,'time'=>self::$start[$key],'different'=>0);
+		self::$step[$key] = [];
+		self::$last = ['key'=>$key,'title'=>$title,'time'=>self::$start[$key],'different'=>0];
 		self::step($key,$title);
 	}
 	static function step($key = 0,$title = '') {
@@ -21,7 +21,7 @@ class Timer {
 		}
 		
 		$correct = microtime(true);
-		self::$last = array('key'=>$key,'title'=>$title,'time'=>$correct,'different'=>($correct - self::$start[$key]));
+		self::$last = ['key'=>$key,'title'=>$title,'time'=>$correct,'different'=>($correct - self::$start[$key])];
 		self::$step[$key][] = self::$last;
 	}
 	

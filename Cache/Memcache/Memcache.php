@@ -8,7 +8,7 @@ class Memcache {
 	private $port = 11211;
 	private $connect; 
 
-	public function __construct($options = array()) {
+	public function __construct($options = []) {
 		foreach($options as $k=>$v) {
 			if(property_exists($this, $k)) {
 				if(gettype($v) === gettype($this->$k)) {

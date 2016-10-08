@@ -2,21 +2,21 @@
 namespace FW\Cache;
 
 class Cache {
-	static $instance = array();
+	static $instance = [];
 	static $driver = 'Mysql';
-	static $driver_allow = array('Mysql','Memcache','File');
-	static $block_opt = array(
+	static $driver_allow = ['Mysql','Memcache','File'];
+	static $block_opt = [
 		'key' => 'default',
 		'expire' => 36000,
 		'fast' => false,
 		'safe' => false,
 		'compress' => false,
-	);
-	static $php_tags = array(
-		'fake' => array('%%<php%','%php>%%'),
-		'real' => array('<?php', '?>'),
-	);
-	static function connect($driver = false, $options = array()) {
+	];
+	static $php_tags = [
+		'fake' => ['%%<php%','%php>%%'],
+		'real' => ['<?php', '?>'],
+	];
+	static function connect($driver = false, $options = []) {
 		if($driver) {
 			if(!in_array($driver,self::$driver_allow)) {
 				throw new \Exception('Недопустимый драйвер');
@@ -46,7 +46,7 @@ class Cache {
 		return self::connect()->delete_all();
 	}
 	
-	static function beginCache($key,$options = array()) {
+	static function beginCache($key,$options = []) {
 		self::$block_opt['key'] = $key;
 		foreach($options as $k=>$v) {
 			if(isset(self::$block_opt[$k])) {
@@ -69,8 +69,8 @@ class Cache {
 
 	static function endCache() {
 		$res = ob_get_clean();
-		$before = array('<?', '?>', '<%', '%>', '<script language="php">');
-		$after = array('&lt;?','?&gt;','&lt;%','%&gt;','&lt;script language=&quot;php&quot;&gt;');
+		$before = ['<?', '?>', '<%', '%>', '<script language="php">'];
+		$after = ['&lt;?','?&gt;','&lt;%','%&gt;','&lt;script language=&quot;php&quot;&gt;'];
 		$res = str_ireplace($before,$after,$res);
 		if(self::$block_opt['safe']) {
 			$res = str_ireplace(self::$php_tags['fake'],self::$php_tags['real'],$res);
@@ -102,7 +102,7 @@ class Cache {
 	}
 
 	static function compress($str) {
-		$str = str_replace(array("\r","\n","\t"),' ',$str);
+		$str = str_replace(["\r","\n","\t"],' ',$str);
 		$str = preg_replace('#\s{2,}#',' ',$str);
 		return $str;
 	}

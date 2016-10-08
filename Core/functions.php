@@ -7,6 +7,9 @@ function wtf($array, $stop = false) {
 }
 
 function trimAll($el,$array = false) {
+	if(!$array && !is_string($el)) {
+		throw new Exception('Был передан массив, необходимо передавать строку');
+	}
 	if(!is_array($el)) {
 		$el = trim($el);
 	} else {
@@ -16,6 +19,9 @@ function trimAll($el,$array = false) {
 }
 
 function intAll($el,$array = false) {
+	if(!$array && !is_numeric($el)) {
+		throw new Exception('Был передан массив, необходимо передавать строку');
+	}
 	if(!is_array($el)) {
 		$el = (int)($el);
 	} else {
@@ -25,6 +31,9 @@ function intAll($el,$array = false) {
 }
 
 function floatAll($el,$array = false) {
+	if(!$array && !is_numeric($el)) {
+		throw new Exception('Был передан массив, необходимо передавать строку');
+	}
 	if(!is_array($el)) {
 		$el = (float)($el);
 	} else {
@@ -73,23 +82,91 @@ spl_autoload_register('myAuthoload');
  * @return mysqli_result;
  */
 function q($query,$key = 0) {
-	if(Core::$EVENTS) \FW\Event\Event::trigger('BeforeQuery');
+	if(\Core::$EVENTS) \FW\Event\Event::trigger('BeforeQuery');
 	$res = \FW\DB\DB::_($key)->query($query);
-	if(Core::$EVENTS) \FW\Event\Event::trigger('AfterQuery');
+	if(\Core::$EVENTS) \FW\Event\Event::trigger('AfterQuery');
 	if($res === false) {
 		$info = debug_backtrace();
-		$error = "QUERY: ".$query."<br>\r\n".\FW\DB\DB::_($key)->error."<br>\r\n".
-			"file: ".$info[0]['file']."<br>\r\n".
-			"line: ".$info[0]['line']."<br>\r\n".
-			"date: ".date("Y-m-d H:i:s")."<br>\r\n".
+		if(stripos($info[0]['file'],'library\Pagination\Pagination') !== false) {
+			$file = $info[1]['file'];
+			$line = $info[1]['line'];
+		} else {
+			$file = $info[0]['file'];
+			$line = $info[0]['line'];
+		}
+		$error = $query."\r\n--".\FW\DB\DB::_($key)->error."\r\n".
+			'--file: '.$file."\r\n".
+			'--line: '.$line."\r\n".
+			'--date: '.date("Y-m-d H:i:s")."\r\n".
 			"===================================";
 
-		file_put_contents('./logs/mysql.log',strip_tags($error)."\r\n\r\n",FILE_APPEND);
-		echo $error;
+		file_put_contents('./logs/mysql.log',$error."\r\n\r\n",FILE_APPEND);
+		if(Core::$STATUS == 1) {
+			echo nl2br(htmlspecialchars($error));
+		} else {
+			echo \FrontController::init('404');
+		}
 		exit();
 	}
 	return $res;
 }
+
+class DB {
+	static public $mysqli = [];
+	static public $connect = [];
+
+	/**
+	 * @param int $key
+	 * @return \mysqli;
+	 */
+	static public function _($key = 0) {
+		if(!isset(self::$mysqli[$key])) {
+			if(!isset(self::$connect['server']))
+				self::$connect['server'] = Core::$DB_LOCAL;
+			if(!isset(self::$connect['user']))
+				self::$connect['user'] = Core::$DB_LOGIN;
+			if(!isset(self::$connect['pass']))
+				self::$connect['pass'] = Core::$DB_PASS;
+			if(!isset(self::$connect['db']))
+				self::$connect['db'] = Core::$DB_NAME;
+
+			self::$mysqli[$key] = @new \mysqli(self::$connect['server'],self::$connect['user'],self::$connect['pass'],self::$connect['db']); // WARNING
+			if (mysqli_connect_errno()) {
+				echo 'Не удалось подключиться к Базе Данных';
+				exit;
+			}
+			if(!self::$mysqli[$key]->set_charset("utf8")) {
+				echo 'Ошибка при загрузке набора символов utf8:'.self::$mysqli[$key]->error;
+				exit;
+			}
+			if(!empty(Core::$DB_TIME_ZONE)) {
+				self::$mysqli[$key]->query("set time_zone = '".es(Core::$DB_TIME_ZONE)."'");
+			}
+		}
+		return self::$mysqli[$key];
+	}
+	static public function close($key = 0) {
+		self::$mysqli[$key]->close();
+		unset(self::$mysqli[$key]);
+	}
+
+	/**
+	 * @param $res mysqli_result
+	 * @return mixed
+	 */
+	static public function result(mysqli_result $res) {
+		$row = $res->fetch_row();
+		return $row[0];
+	}
+	static public function multi_query($res,$key = 0) {
+		return self::$mysqli[$key]->multi_query($res);
+	}
+
+	static public function begin_transaction($key = 0) {}
+	static public function commit($key = 0) {}
+	static public function rollback($key = 0) {}
+}
+
 
 function es($el,$key = 0) {
 	return \FW\DB\DB::_($key)->real_escape_string($el);
@@ -108,6 +185,7 @@ function shutDownFunction() {
 		if(Core::$EVENTS) \FW\Event\Event::trigger('ShutDownSystemError');
 		return \FW\MyErrorHandler\myErrorHandler::handler($error['type'],$error['message'],$error['file'],$error['line']);
 	}
+	return false;
 }
 register_shutdown_function('shutdownFunction');
 
@@ -219,7 +297,7 @@ function urlFix($text) {
 }
 
 function getEng($text) {
-	$tr = array(
+	$tr = [
 		"А"=>"A","Б"=>"B","В"=>"V","Г"=>"G",
 		"Д"=>"D","Е"=>"E","Ж"=>"J","З"=>"Z","И"=>"I",
 		"Й"=>"Y","К"=>"K","Л"=>"L","М"=>"M","Н"=>"N",
@@ -237,7 +315,7 @@ function getEng($text) {
 		"."=>"-"," "=>"-","?"=>"_","/"=>"_","\\"=>"_",
 		"*"=>"-",":"=>"_","\""=>"_","<"=>"_",
 		">"=>"-","|"=>"-"
-	);
+	];
 	return mb_strtolower(strtr($text,$tr),'UTF-8');
 }
 
@@ -245,10 +323,6 @@ function myHash($var) {
 	$salt = 'mmomoj';
 	$salt2 = 'wamfwmlo';
 	return crypt(md5($var.$salt),$salt2);
-}
-
-function doError($key) {
-
 }
 
 function isAdmin() {

@@ -45,7 +45,7 @@ class Registration {
 			$mail->msgHTML('<div>Вы успешно зарегистрировались на сайте.</div><div>Для завершения регистрации пройдите по ссылке:<br><a href="'.Core::$DOMAIN.'/login/activate/'.$id.'/'.$hash.'">'.Core::$DOMAIN.'/login/activate/'.$id.'/'.$hash.'</a></div>');
 			$mail->send();
 			unset($mail);
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			trigger_error('Ошибка регистрации: '. print_r($e,1));
 		}
 		return true;
