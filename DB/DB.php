@@ -13,13 +13,13 @@ $res->fetch_assoc(); // достаём запись - mysqli_fetch_assoc();
 $res->close(); // Очищаем результат выборки
 
 РАБОТА С ПОДКЛЮЧЕННОЙ MYSQL
-\FW\DB\DB::_()->affected_rows; // Количество изменённых записей
-\FW\DB\DB::_()->insert_id; // Последний ID вставки
-\FW\DB\DB::_()->real_escape_string(); // аналог es();
-\FW\DB\DB::_()->query(); // аналог q
-\FW\DB\DB::_()->multi_ query(); // Множественные запросы
+\DB::_()->affected_rows; // Количество изменённых записей
+\DB::_()->insert_id; // Последний ID вставки
+\DB::_()->real_escape_string(); // аналог es();
+\DB::_()->query(); // аналог q
+\DB::_()->multi_ query(); // Множественные запросы
 
-\FW\DB\DB::close(); // Закрываем соединение с БД
+\DB::close(); // Закрываем соединение с БД
 */
 
 class DB {

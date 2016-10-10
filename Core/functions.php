@@ -170,7 +170,7 @@ class DB {
 
 
 function es($el,$key = 0) {
-	return \FW\DB\DB::_($key)->real_escape_string($el);
+	return \DB::_($key)->real_escape_string($el);
 }
 
 set_error_handler('\FW\MyErrorHandler\MyErrorHandler::handler');

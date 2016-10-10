@@ -11,7 +11,7 @@ class Registration {
 			`password` = '".es($pass)."',
 			`email` = '".es($email)."'
 		");
-		$id = FW\DB\DB::_()->insert_id;
+		$id = \DB::_()->insert_id;
 		$hash = md5($id.microtime(true).rand(1,1000000).$pass);
 		q("
 			UPDATE `fw_users` SET
@@ -59,7 +59,7 @@ class Registration {
 			  AND `access` = 0
 			  AND `hash` = '".es($hash)."'
 		");
-		if(!\FW\DB\DB::_()->affected_rows) {
+		if(!\DB::_()->affected_rows) {
 			return false;
 		}
 		return true;
