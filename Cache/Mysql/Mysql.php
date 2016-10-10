@@ -67,7 +67,7 @@ class Mysql {
 				LIMIT ".$this->delstep."
 			");
 
-		} while(\FW\DB\DB::_()->affected_rows);
+		} while(\DB::_()->affected_rows);
 		return true;
 	}
 	
