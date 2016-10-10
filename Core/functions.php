@@ -111,6 +111,7 @@ function q($query,$key = 0) {
 	return $res;
 }
 
+
 class DB {
 	static public $mysqli = [];
 	static public $connect = [];
