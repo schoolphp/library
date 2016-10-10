@@ -83,7 +83,7 @@ spl_autoload_register('myAuthoload');
  */
 function q($query,$key = 0) {
 	if(\Core::$EVENTS) \FW\Event\Event::trigger('BeforeQuery');
-	$res = \FW\DB\DB::_($key)->query($query);
+	$res = \DB::_($key)->query($query);
 	if(\Core::$EVENTS) \FW\Event\Event::trigger('AfterQuery');
 	if($res === false) {
 		$info = debug_backtrace();
@@ -94,7 +94,7 @@ function q($query,$key = 0) {
 			$file = $info[0]['file'];
 			$line = $info[0]['line'];
 		}
-		$error = $query."\r\n--".\FW\DB\DB::_($key)->error."\r\n".
+		$error = $query."\r\n--".\DB::_($key)->error."\r\n".
 			'--file: '.$file."\r\n".
 			'--line: '.$line."\r\n".
 			'--date: '.date("Y-m-d H:i:s")."\r\n".
@@ -122,20 +122,20 @@ class DB {
 	static public function _($key = 0) {
 		if(!isset(self::$mysqli[$key])) {
 			if(!isset(self::$connect['server']))
-				self::$connect['server'] = Core::$DB_LOCAL;
+				self::$connect['server'] = \Core::$DB_LOCAL;
 			if(!isset(self::$connect['user']))
-				self::$connect['user'] = Core::$DB_LOGIN;
+				self::$connect['user'] = \Core::$DB_LOGIN;
 			if(!isset(self::$connect['pass']))
-				self::$connect['pass'] = Core::$DB_PASS;
+				self::$connect['pass'] = \Core::$DB_PASS;
 			if(!isset(self::$connect['db']))
-				self::$connect['db'] = Core::$DB_NAME;
+				self::$connect['db'] = \Core::$DB_NAME;
 
 			self::$mysqli[$key] = @new \mysqli(self::$connect['server'],self::$connect['user'],self::$connect['pass'],self::$connect['db']); // WARNING
 			if (mysqli_connect_errno()) {
 				echo 'Не удалось подключиться к Базе Данных';
 				exit;
 			}
-			if(!self::$mysqli[$key]->set_charset("utf8")) {
+			if(!self::$mysqli[$key]->set_charset("utf8mb4")) {
 				echo 'Ошибка при загрузке набора символов utf8:'.self::$mysqli[$key]->error;
 				exit;
 			}
