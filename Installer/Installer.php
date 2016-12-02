@@ -67,7 +67,7 @@ class Installer
 	}
 	static function makeDir($dir) {
 		if(!file_exists(self::$basedir.$dir)) {
-			if(!mkdir(self::$basedir.$dir,755,true)) {
+			if(!mkdir(self::$basedir.$dir,0775,true)) {
 				self::addLog('error','Не удалось создать директорию '.$dir.'. Возможно нет прав на рабочий каталог');
 			} else {
 				self::addLog('success','Директория `'.$dir.'` была создана');
@@ -202,11 +202,11 @@ class Installer
 		if(!$link->query("
 			CREATE TABLE IF NOT EXISTS `fw_shortlink` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
-			  `short` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-			  `full` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+			  `short` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  `full` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
 			  PRIMARY KEY (`id`),
 			  UNIQUE KEY `ixSF` (`short`,`full`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 		")) {
 			self::addLog('error','Ошибка при работе с БД: '.$link->error);
 		} else {
@@ -215,11 +215,11 @@ class Installer
 
 		if(!$link->query("
 			CREATE TABLE IF NOT EXISTS `fw_cache_data` (
-			  `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-			  `value` text COLLATE utf8_unicode_ci NOT NULL,
+			  `key` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
 			  `expire` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`key`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 		")) {
 			self::addLog('error','Ошибка при работе с БД: '.$link->error);
 		} else {
@@ -228,14 +228,14 @@ class Installer
 
 		if(!$link->query("
 			CREATE TABLE IF NOT EXISTS `fw_sessions` (
-			  `id` varchar(32) NOT NULL,
+			  `id` varchar(32) NOT NULL DEFAULT '',
 			  `expires` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-			  `ip` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
-			  `useragent` text COLLATE utf8_unicode_ci NOT NULL,
-			  `data` text COLLATE utf8_unicode_ci NOT NULL,
+			  `ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  `useragent` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
 			  PRIMARY KEY (`id`),
 			  KEY `ip` (`ip`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 		")) {
 			self::addLog('error','Ошибка при работе с БД: '.$link->error);
 		} else {
@@ -244,7 +244,7 @@ class Installer
 
 		if(!$link->query("
 			CREATE TABLE IF NOT EXISTS `fw_unsubscribe` (
-			  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+			  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
 			  PRIMARY KEY (`email`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 		")) {
@@ -272,20 +272,20 @@ class Installer
 		if(!$link->query("
 			CREATE TABLE IF NOT EXISTS `fw_users` (
 			  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-			  `login` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-			  `password` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-			  `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+			  `login` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
 			  `date` datetime NOT NULL,
 			  `access` tinyint(4) NOT NULL DEFAULT '0',
-			  `hash` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-			  `role` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'user',
-			  `ip` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
-			  `browser` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+			  `hash` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  `role` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user',
+			  `ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  `browser` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
 			  `lastactive` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-			  `skype` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+			  `skype` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
 			  `about` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
 			  PRIMARY KEY (`id`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 		")) {
 			self::addLog('error','Ошибка при работе с БД: '.$link->error);
 		} else {
@@ -317,12 +317,12 @@ class Installer
 			CREATE TABLE IF NOT EXISTS `fw_users_ip_defender` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			  `ip` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+			  `ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
 			  `count` tinyint(4) NOT NULL DEFAULT '0',
 			  PRIMARY KEY (`id`),
 			  KEY `date` (`date`),
 			  KEY `ip` (`ip`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 		")) {
 			self::addLog('error','Ошибка при работе с БД: '.$link->error);
 		} else {
@@ -333,12 +333,12 @@ class Installer
 			CREATE TABLE IF NOT EXISTS `fw_php_logs` (
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-			  `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-			  `error` text COLLATE utf8_unicode_ci NOT NULL,
-			  `trace` longtext COLLATE utf8_unicode_ci NOT NULL,
+			  `link` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  `error` text COLLATE utf8mb4_unicode_ci NOT NULL,
+			  `trace` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
 			  PRIMARY KEY (`id`),
 			  KEY `link` (`link`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1
 		")) {
 			self::addLog('error','Ошибка при работе с БД: '.$link->error);
 		} else {
