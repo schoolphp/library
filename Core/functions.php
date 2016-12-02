@@ -132,8 +132,8 @@ class DB {
 				self::$connect['db'] = \Core::$DB_NAME;
 
 			self::$mysqli[$key] = @new \mysqli(self::$connect['server'],self::$connect['user'],self::$connect['pass'],self::$connect['db']); // WARNING
-			if (mysqli_connect_errno()) {
-				echo 'Не удалось подключиться к Базе Данных';
+			if (self::$mysqli[$key]->connect_error) {
+				echo 'Ошибка подключения к Базе Данных ('.self::$mysqli[$key]->connect_errno.') '.self::$mysqli[$key]->connect_error;
 				exit;
 			}
 			if(!self::$mysqli[$key]->set_charset("utf8mb4")) {
