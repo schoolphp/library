@@ -1,12 +1,10 @@
 <?php
-return array(
+return [
 	'main' => [
-		'main' => [
-			'page' => array(
-				'rules' => '[0-9]+',
-				'default' => 1,
-				'type' => 'int',
-			),
+		'page' => [
+			'rules' => '[0-9]+',
+			'default' => 1,
+			'type' => 'int',
 		],
 	],
-);
+];

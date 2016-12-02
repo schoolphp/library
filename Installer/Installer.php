@@ -300,7 +300,8 @@ class Installer
 			`password` = '".password_hash($_SESSION['password'],PASSWORD_DEFAULT)."',
 			`date` = NOW(),
 			`access` = 1,
-			`role` = 'admin'
+			`role` = 'admin',
+			`about` = ''
 		")
 			) {
 				self::addLog('error', 'Ошибка при работе с БД: '.$link->error);
