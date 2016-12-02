@@ -231,7 +231,7 @@ class Installer
 			  `id` varchar(32) NOT NULL DEFAULT '',
 			  `expires` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  `ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-			  `useragent` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  `useragent` text COLLATE utf8mb4_unicode_ci NOT NULL,
 			  `data` text COLLATE utf8mb4_unicode_ci NOT NULL,
 			  PRIMARY KEY (`id`),
 			  KEY `ip` (`ip`)
