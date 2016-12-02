@@ -1,6 +1,4 @@
 <?php
-return array(
-	'main' => [
-		'main' => [],
-	],
-);
+return [
+	'main' => [],
+];
