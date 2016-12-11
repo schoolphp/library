@@ -17,7 +17,11 @@ class MyErrorHandler {
 			++self::$key;
 		}
 
-		$text = include __DIR__.'/language/'.Core::$LANGUAGE['lang'].'.php';
+		if(file_exists(__DIR__.'/language/'.Core::$LANGUAGE['lang'].'.php')) {
+			$text = include __DIR__.'/language/'.Core::$LANGUAGE['lang'].'.php';
+		} else {
+			$text = include __DIR__.'/language/ru.php';
+		}
 
 		$errors = [1 => 'Error',2 => 'Warning',4 => 'Parse',8 => 'Notice',16 => 'Core error',32 => 'Core warning',64 => 'Complite error',128 => 'Complite warning',256 => 'User Error',512 => 'User Warning',1024 => 'User Notice',2048 => 'Strict',4096 => 'Recoverable error',8192 => 'Deprecated',16384 => 'User Deprecated',32767 => 'All'];
 
