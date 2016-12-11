@@ -26,7 +26,7 @@ class Core {
 	static $SHORTLINK = true;
 	static $AUTOCANONICAL = false;
 
-	static $META     = array(
+	static $META = [
 		'title'=>'стандартный TITLE',
 		'description'=>'d',
 		'keywords'=>'k',
@@ -35,27 +35,27 @@ class Core {
 		'shortlink' => '',
 		'prev' => '',
 		'next' => '',
-		'dns-prefetch' => array(),
+		'dns-prefetch' => [],
 		'head' => '',
-	);
+	];
 
-	static $LANGUAGE = array(
+	static $LANGUAGE = [
 		'status' => false,
 		'lang' => 'ru',
 		'html_locale' => 'ru-RU',
 		'default' => 'ru',
-		'allow' => array('ru','en'),
-	);
+		'allow' => ['ru','en'],
+	];
 
-	static $STUBROUTINE = array(
+	static $STUBROUTINE = [
 		'status' => false,
-		'ip_access' => array(
-			'ip' => array('127.0.0.1'), // Example '127.0.0.1'
-			'ip_mask' => array(), // Example '127.0.0.1/32'
-		),
-	);
+		'ip_access' => [
+			'ip' => ['127.0.0.1'], // Example '127.0.0.1'
+			'ip_mask' => [], // Example '127.0.0.1/32'
+		],
+	];
 
-	static $ERRORS = array(
+	static $ERRORS = [
 		'file' => 1, // Logged in file: logs/php.log
 		'mysql' => 0, // Logged in mysql: `php_logs`
 		'email' => 0, // Mess to email $ADMIN
@@ -64,14 +64,14 @@ class Core {
 		'stop' => 0, // exit(); for everything notice or warning
 		'errlvl' => 2, // Errors-logged: 2 - All errors, 1 - Not user
 		'trace' => 0, // Save full TRACE
-	);
+	];
 
-	static $SITEMAP = array();
+	static $SITEMAP = [];
 
 	/* Системное. НЕ трогать, если не шарите! */
 	static $DIRECTORY;
-	static $JS = array();
-	static $CSS = array();
+	static $JS = [];
+	static $CSS = [];
 	
 }
 
