@@ -320,9 +320,7 @@ function getEng($text) {
 	return mb_strtolower(strtr($text,$tr),'UTF-8');
 }
 
-function myHash($var) {
-	$salt = 'mmomoj';
-	$salt2 = 'wamfwmlo';
+function myHash($var,$salt = 'mmomoj', $salt2 = 'wamfwmlo') {
 	return crypt(md5($var.$salt),$salt2);
 }
 
