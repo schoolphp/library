@@ -36,7 +36,12 @@ class Pagination {
 	}
 
 	static function nav($clearget = true) {
-		$text = include __DIR__.'/language/'.Core::$LANGUAGE['lang'].'.php';
+
+		if(file_exists(__DIR__.'/language/'.Core::$LANGUAGE['lang'].'.php')) {
+			$text = include __DIR__.'/language/'.Core::$LANGUAGE['lang'].'.php';
+		} else {
+			$text = include __DIR__.'/language/ru.php';
+		}
 
 		$nav = '<ul class="pagination">';
 		
