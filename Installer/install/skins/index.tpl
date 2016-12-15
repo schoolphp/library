@@ -39,7 +39,7 @@
 <link rel="apple-touch-icon" sizes="152x152" href="/touch-icon-ipad-retina.png">
 <link href="/skins/components/bower/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="/skins/components/bower/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
-<link href="/skins/<?=Core::$SKIN;?>/css/styles.min.css" rel="stylesheet">
+<link href="/skins<?=Core::$SKIN;?>/css/styles.min.css" rel="stylesheet">
 <?php if(count(Core::$CSS)) {echo '<link href="'.implode('" rel="stylesheet">'."\n".'<link href="',Core::$CSS).'" rel="stylesheet">';} ?>
 <script>
 var antixsrf = '<?php echo (isset($_SESSION['antixsrf']) ? $_SESSION['antixsrf'] : 'no'); ?>';
