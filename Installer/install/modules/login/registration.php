@@ -1,45 +1,49 @@
 <?php
-$status = '';
-$_SESSION['antixsrf-form-registration'] = 'xxx';
-$_POST['antixsrf'] = 'xxx';
 $form = new \FW\Form\Form('registration');
 $form->create([
-	'login' => array(
-		'title'=>'',
+	'login' => [
+		'title'=> 'Введите логин*',
 		'text' => '',
-		'attr' => array(
+		'attr' => [
 			'placeholder' => 'Логин',
 			'class' => 'form-control',
-		),
-		'rules' => array(
+		],
+		'rules' => [
 			'length' => '5,20',
-			'unique' => array('table'=>'fw_users','cell'=>'login'),
-		)
-	),
-	'password' => array(
-		'title'=>'',
+			'unique' => ['table'=>'fw_users','cell'=>'login'],
+		]
+	],
+	'password' => [
+		'title'=> 'Введите пароль*',
 		'text' => '',
 		'type' => 'password',
-		'attr' => array(
+		'attr' => [
 			'placeholder' => 'Пароль',
 			'class' => 'form-control',
-		),
-		'rules' => array(
+		],
+		'rules' => [
 			'length' => '6,20',
-		)
-	),
-	'email' => array(
-		'title'=>'',
+		]
+	],
+	'email' => [
+		'title'=> 'Введите e-mail*',
 		'text' => '',
-		'attr' => array(
+		'attr' => [
 			'placeholder' => 'e-mail',
 			'class' => 'form-control',
-		),
-		'rules' => array(
+		],
+		'rules' => [
 			'email',
-			'unique' => array('table'=>'fw_users','cell'=>'email')
-		)
-	),
+			'unique' => ['table'=>'fw_users','cell'=>'email']
+		]
+	],
+	'submit' => [
+		'title'=> '',
+		'text' => '',
+		'value'=> 'Регистрация',
+		'type' => 'submit',
+		'attr' => ['class' => 'btn btn-primary']
+	]
 ]);
 if($form->issend()) {
 	$reg = new \FW\User\Registration;
@@ -49,7 +53,5 @@ if($form->issend()) {
 		$status = 'Ошибка регистрации';
 	}
 } else {
-	$status = $form->error;
+	$error = $form->error;
 }
-echo $status;
-exit;
