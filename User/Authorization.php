@@ -42,7 +42,7 @@ class Authorization {
 	function authByLoginPass($login,$password,$rememberme = false) {
 		// IP CONTROL
 		if(!$this->ipDefender()) {
-			$this->error = 'ip-defender';
+			$this->errors = ['ip-defender'];
 			return false;
 		}
 		
@@ -53,19 +53,19 @@ class Authorization {
 			LIMIT 1
 		");
 		if(!$res->num_rows) {
-			$this->error = 'wrong-login';
+			$this->errors = ['login'=>'wrong-login'];
 			return false;
 		}
 		$row = $res->fetch_assoc();
 		if(!password_verify($password, $row['password'])) {
-			$this->error = 'wrong-password';
+			$this->errors = ['password'=>'wrong-password'];
 			return false;
 		}
 		if($row['access'] != 1) {
 			if($row['access'] == 0) {
-				$this->error = 'wrong-access-confirm';
+				$this->errors = ['wrong-access-confirm'];
 			} else {
-				$this->error = 'wrong-access';
+				$this->errors = ['wrong-access'];
 			}
 			return false;
 		}
@@ -107,29 +107,29 @@ class Authorization {
 			LIMIT 1
 		");
 		if(!$res->num_rows) {
-			$this->error = 'wrong-hash';
+			$this->errors = ['wrong-hash'];
 			return false;
 		}
 		$row = $res->fetch_assoc();
 		if($row['access'] != 1) {
 			if($row['access'] == 0) {
-				$this->error = 'wrong-access-confirm';
+				$this->errors = ['wrong-access-confirm'];
 			} else {
-				$this->error = 'wrong-access';
+				$this->errors = ['wrong-access'];
 			}
 			return false;
 		}
 		
 		if($this->browser) {
 			if($row['browser'] != $_SERVER['HTTP_USER_AGENT']) {
-				$this->error = 'wrong-browser';
+				$this->errors = ['wrong-browser'];
 				return false;
 			}
 		}
 
 		if($this->ip == 1) {
 			if($row['ip'] != $_SERVER['REMOTE_ADDR']) {
-				$this->error = 'wrong-ip';
+				$this->errors = ['wrong-ip'];
 				return false;
 			}
 		}elseif($this->ip == 2) {
@@ -142,7 +142,7 @@ class Authorization {
 				$ipnow = $matches[1];
 
 			if(isset($ipbase,$ipnow) && $ipbase != $ipnow) {
-				$this->error = 'wrong-ip';
+				$this->errors = ['wrong-ip'];
 				return false;
 			}
 		}
@@ -156,10 +156,14 @@ class Authorization {
 
 	public function getErrorMess() {
 		require __DIR__.'/Authorization/language/'.\Core::$LANGUAGE['lang'].'.php';
-		if(isset($language[$this->error]))
-			return $language[$this->error];
-		else
-			throw new \Exception('Wrong error!');
+		$errors = [];
+		foreach($this->errors as $k=>$v) {
+			if(isset($language[$this->errors[$k]]))
+				$errors[$k] = $language[$this->errors[$k]];
+			else
+				throw new \Exception('Wrong error!');
+		}
+		return $errors;
 	}
 
 	static function logout() {
