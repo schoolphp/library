@@ -4,5 +4,5 @@ namespace FW\User\Authorization;
 trait Config {
 	public $browser = true;
 	public $ip = false;
-	public $error = '';
+	public $errors = [];
 }
