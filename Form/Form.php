@@ -3,10 +3,11 @@ namespace FW\Form;
 
 class Form extends FormSettings {
 	
+	public $error = '';
+	public $content = [];
 	private $view = '';
-	public $content = array();
-	private $REQUEST = array();
-	private $tpl = array();
+	private $REQUEST = [];
+	private $tpl = [];
 	
 	function __construct($name = 'basic') {
 		try {

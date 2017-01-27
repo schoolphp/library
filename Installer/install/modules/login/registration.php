@@ -2,8 +2,8 @@
 $status = '';
 $_SESSION['antixsrf-form-registration'] = 'xxx';
 $_POST['antixsrf'] = 'xxx';
-$form = new Form('registration');
-$form->create(array(
+$form = new \FW\Form\Form('registration');
+$form->create([
 	'login' => array(
 		'title'=>'',
 		'text' => '',
@@ -40,7 +40,7 @@ $form->create(array(
 			'unique' => array('table'=>'fw_users','cell'=>'email')
 		)
 	),
-));
+]);
 if($form->issend()) {
 	$reg = new \FW\User\Registration;
 	if($reg->regist($_POST['login'],$_POST['password'],$_POST['email'])) {
