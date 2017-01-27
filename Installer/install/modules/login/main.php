@@ -1,5 +1,5 @@
 <?php
-$form = new \FW\Form\Form('registration');
+$form = new \FW\Form\Form('authorization');
 $form->create([
 	'login' => [
 		'title'=> '',
