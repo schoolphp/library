@@ -39,15 +39,23 @@ class Authorization {
 		return true;
 	}
 
-	function authByEmail($email,$rememberme = false) {
+	function authByField($data,$rememberme = false) {
+		if(!count($data)) {
+			$this->errors = ['data'=>'empty-data'];
+			return false;
+		}
+		$where = [];
+		foreach($data as $k=>$v) {
+			$where[] = "`".es($k)."` = '".es($v)."'";
+		}
 		$res = q("
 			SELECT *
 			FROM `fw_users`
-			WHERE `email` = '".es($email)."'
+			WHERE ".implode(' AND ',$where)."
 			LIMIT 1
 		");
 		if(!$res->num_rows) {
-			$this->errors = ['email'=>'wrong-email'];
+			$this->errors = ['data'=>'wrong-data'];
 			return false;
 		}
 		$row = $res->fetch_assoc();

@@ -9,5 +9,6 @@ $language = [
 	'wrong-browser' => 'Не совпадает браузер',
 	'wrong-ip' => 'Не совпадает IP',
 	'ip-defender' => 'Ваш IP временно заблокирован',
-	'wrong-email' => 'Неправильный Email',
+	'empty-data' => 'Данные пустые',
+	'wrong-data' => 'Неправильные данные',
 ];
