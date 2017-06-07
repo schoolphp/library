@@ -39,6 +39,35 @@ class Authorization {
 		return true;
 	}
 
+	function authByEmail($email,$rememberme = false) {
+		$res = q("
+			SELECT *
+			FROM `fw_users`
+			WHERE `email` = '".es($email)."'
+			LIMIT 1
+		");
+		if(!$res->num_rows) {
+			$this->errors = ['email'=>'wrong-email'];
+			return false;
+		}
+		$row = $res->fetch_assoc();
+		if($row['access'] != 1) {
+			if($row['access'] == 0) {
+				$this->errors = ['wrong-access-confirm'];
+			} else {
+				$this->errors = ['wrong-access'];
+			}
+			return false;
+		}
+
+		if($rememberme) {
+			$row['hash'] = $this->rememberMe($row['id']);
+		}
+		\User::$data = $row;
+		$_SESSION['user']['id'] = $row['id'];
+		return true;
+	}
+
 	function authByLoginPass($login,$password,$rememberme = false) {
 		// IP CONTROL
 		if(!$this->ipDefender()) {
