@@ -1,5 +1,5 @@
 <?php
-$language = array(
+$language = [
 	'wrong-login' => 'Неправильный логин',
 	'wrong-password' => 'Неправильный пароль',
 	'wrong-access' => 'Вы были заблокированы',
@@ -9,4 +9,5 @@ $language = array(
 	'wrong-browser' => 'Не совпадает браузер',
 	'wrong-ip' => 'Не совпадает IP',
 	'ip-defender' => 'Ваш IP временно заблокирован',
-);
+	'wrong-email' => 'Неправильный Email',
+];
