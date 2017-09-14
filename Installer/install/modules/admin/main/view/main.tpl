@@ -13,7 +13,7 @@
 				<input type="password" name="pass" class="form-control" id="admPass" placeholder="Пароль">
 			</div>
 			<?php if(isset($error)) {
-				echo '<div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <span class="sr-only">Ошибка авторизации:</span> '.$error.' </div>';
+				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation" aria-hidden="true"></i> <span class="sr-only">Ошибка авторизации:</span> '.$error.' </div>';
 			} ?>
 		</div>
 		<div class="admin-auth-form-footer">

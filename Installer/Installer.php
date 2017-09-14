@@ -157,10 +157,15 @@ class Installer
 		self::copyFile('/skins/admin.tpl');
 		self::copyFile('/skins/stubroutine.tpl');
 
-		self::copyFile('/skins/css/admin.css');
-		self::copyFile('/skins/css/styles.css');
-		self::copyFile('/skins/css/styles.less');
-		self::copyFile('/skins/css/styles.min.css');
+		self::copyFile('/skins/css/admin.less');
+		self::copyFile('/skins/css/admin.min.css');
+		self::copyFile('/skins/css/begin.less');
+		self::copyFile('/skins/css/begin.min.css');
+		self::copyFile('/skins/css/end.less');
+		self::copyFile('/skins/css/end.min.css');
+		self::copyFile('/skins/css/normalize.less');
+		self::copyFile('/skins/css/normalize.min.css');
+		self::copyFile('/skins/css/bootstrap.min.css');
 
 		self::copyFile('/skins/img/logo.jpg');
 		self::copyFile('/skins/img/logo2.jpg');
