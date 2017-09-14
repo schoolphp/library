@@ -89,7 +89,7 @@ if(isAdmin()) { /* Login */ ?>
 <?php } ?>
 <?php echo $content; ?>
 <footer>
-  Разработано на Fox and Wolf Framework &copy; <?=Core::$CREATED;?> | <a href="mailto:inpost@list.ru"><span class="glyphicon glyphicon-envelope"></span> inpost@list.ru</a>
+  Разработано на Fox and Wolf Framework &copy; <?=Core::$CREATED;?> | <a href="mailto:inpost@list.ru"><i class="fa fa-envelope-o" aria-hidden="true"></i> inpost@list.ru</a>
 </footer>
 </body>
 </html>

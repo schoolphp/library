@@ -4,9 +4,9 @@
   Для запрета E-mail адресов, пожалуйста, пройдите по ссылке, которая была отправлена Вам на почту
 <?php } elseif(isset($_SESSION['info'])) { ?> 
     <div class="alert alert-danger" role="alert">
-      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-      <span class="sr-only">Уведомление:</span>
-      <?php echo $_SESSION['info']; unset($_SESSION['info']); ?>
+		<i class="fa fa-exclamation" aria-hidden="true"></i>
+        <span class="sr-only">Уведомление:</span>
+        <?php echo $_SESSION['info']; unset($_SESSION['info']); ?>
     </div>
 <?php } else { ?>
   <div style="padding-bottom:10px; font-size:16px;">Вы можете отписаться от рассылок на почту.<br>Если Вы запретите получать письма, то больше ни одно письмо не придет на Ваш почтовый ящик с нашего сайта!</div>
