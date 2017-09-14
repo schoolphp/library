@@ -82,9 +82,9 @@ spl_autoload_register('myAuthoload');
  * @return mysqli_result;
  */
 function q($query,$key = 0) {
-	if(\Core::$EVENTS) \FW\Event\Event::trigger('BeforeQuery');
+	//if(\Core::$EVENTS) \FW\Event\Event::trigger('BeforeQuery');
 	$res = \DB::_($key)->query($query);
-	if(\Core::$EVENTS) \FW\Event\Event::trigger('AfterQuery');
+	//if(\Core::$EVENTS) \FW\Event\Event::trigger('AfterQuery');
 	if($res === false) {
 		$info = debug_backtrace();
 		if(stripos($info[0]['file'],'library\Pagination\Pagination') !== false) {
