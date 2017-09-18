@@ -38,7 +38,6 @@
   <link rel="apple-touch-icon" sizes="120x120" href="/touch-icon-iphone-retina.png">
   <link rel="apple-touch-icon" sizes="152x152" href="/touch-icon-ipad-retina.png">
   <link href="/skins/components/bower/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/skins/components/bower/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
   <link href="/skins<?php echo Core::$SKIN;?>/css/admin.css" rel="stylesheet">
   <?php if(count(Core::$CSS)) {echo '<link href="'.implode('" rel="stylesheet">'."\n".'<link href="',Core::$CSS).'" rel="stylesheet">';} ?>
   <script>
