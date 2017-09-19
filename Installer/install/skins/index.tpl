@@ -46,7 +46,7 @@
 <link rel="apple-touch-icon" sizes="76x76" href="/touch-icon-ipad.png">
 <link rel="apple-touch-icon" sizes="120x120" href="/touch-icon-iphone-retina.png">
 <link rel="apple-touch-icon" sizes="152x152" href="/touch-icon-ipad-retina.png">
-<style><?php include './skins/css/normalize.css'; include './skins/css/begin.min.css'; ?></style>
+<style><?php include './skins/css/normalize.min.css'; include './skins/css/begin.min.css'; ?></style>
 <?php echo Core::$META['head']; ?>
 </head>
 <body>
