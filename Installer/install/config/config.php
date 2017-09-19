@@ -72,6 +72,7 @@ class Core {
 	static $DIRECTORY;
 	static $JS = [];
 	static $CSS = [];
+	static $END = '';
 	
 }
 
