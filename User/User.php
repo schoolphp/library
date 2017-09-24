@@ -32,7 +32,6 @@ class User {
 			}
 			foreach($called_class::$datas as $k=>$v) {
 				$called_class::$$v = $row[$v];
-				// unset($row[$v]); -- Раскомментировать после обновления функционала на сайте
 			}
 			if(count($row)) {
 				self::$data = $row;
@@ -53,5 +52,8 @@ class User {
 				WHERE `id` = ".(int)self::$data['id']."
 			");
 		}
+	}
+	static function getDatas() {
+		return self::$datas;
 	}
 }

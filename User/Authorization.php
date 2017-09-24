@@ -73,6 +73,9 @@ class Authorization {
 		}
 		\User::$data = $row;
 		$_SESSION['user']['id'] = $row['id'];
+		foreach(\User::getDatas() as $k=>$v) {
+			\User::$$v = $row[$v];
+		}
 		return true;
 	}
 
