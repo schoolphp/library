@@ -54,4 +54,7 @@ class User {
 			");
 		}
 	}
+	static function getDatas() {
+		return self::$datas;
+	}
 }
