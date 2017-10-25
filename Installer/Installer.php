@@ -17,7 +17,7 @@ class Installer
 	}
 
 	static function init() {
-		if(!file_exists(self::$basedir.'/skins/components/bower/bootstrap/dist/css/bootstrap.min.css')
+		if(!file_exists(self::$basedir.'/skins/components/bootstrap/bootstrap.min.css')
 			|| !file_exists(self::$basedir.'/skins/components/bower/jquery/dist/jquery.min.js')
 		) {
 			self::addLog('error','Отсутствует Bootstrap или Jquery. Запусите bower для загрузки пакетов на сайт!');
