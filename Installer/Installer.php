@@ -78,6 +78,7 @@ class Installer
 
 	static function createDir() {
 		self::$step = 1;
+
 		self::makeDir('/config');
 		self::makeDir('/skins/css');
 		self::makeDir('/skins/img');
