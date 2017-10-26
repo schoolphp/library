@@ -67,12 +67,12 @@ class Installer
 	static function makeDir($dir) {
 		if(!file_exists(self::$basedir.$dir)) {
 			if(!mkdir(self::$basedir.$dir,0775,true)) {
-				self::addLog('error','Не удалось создать директорию '.$dir.'. Возможно нет прав на рабочий каталог');
+				self::addLog('error','Не удалось создать директорию '.$dir.'. Возможно нет прав на рабочий каталог!');
 			} else {
-				self::addLog('success','Директория `'.$dir.'` была создана');
+				self::addLog('success','Директория `'.$dir.'` была создана!');
 			}
 		} else {
-			self::addLog('warning','Директория `'.$dir.'` ранее была создана');
+			self::addLog('warning','Директория `'.$dir.'` ранее была создана!');
 		}
 	}
 
