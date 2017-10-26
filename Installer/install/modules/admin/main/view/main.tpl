@@ -6,15 +6,14 @@
 			<div class="form-group">
 				<label for="admLogin">Логин</label>
 				<input type="text" name="login" class="form-control" id="admLogin" placeholder="Логин">
+				<?php if(!empty($error['login'])) {echo '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> '.$error['login'].'</div>';} ?>
 			</div>
 
 			<div class="form-group">
 				<label for="admPass">Пароль</label>
 				<input type="password" name="pass" class="form-control" id="admPass" placeholder="Пароль">
+				<?php if(!empty($error['password'])) {echo '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> '.$error['password'].'</div>';} ?>
 			</div>
-			<?php if(isset($error)) {
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation" aria-hidden="true"></i> <span class="sr-only">Ошибка авторизации:</span> '.$error.' </div>';
-			} ?>
 		</div>
 		<div class="admin-auth-form-footer">
 			<input type="submit" class="btn btn-primary" value="Войти">
