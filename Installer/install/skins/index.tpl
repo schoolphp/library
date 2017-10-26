@@ -75,7 +75,7 @@
  * <link href="/skins/components/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
  */ ?>
 <link href="/skins/css/bootstrap.min.css" rel="stylesheet">
-<link href="/skins/css/other-end.min.css" rel="stylesheet">
+<link href="/skins/css/end.min.css" rel="stylesheet">
 <link href="/skins/components/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <?php if(count(Core::$CSS)) {echo '<link href="'.implode('" rel="stylesheet">'."\n".'<link href="',Core::$CSS).'" rel="stylesheet">';} ?>
 <script>
