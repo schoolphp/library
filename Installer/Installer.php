@@ -72,7 +72,7 @@ class Installer
 				self::addLog('success','Директория `'.$dir.'` была создана');
 			}
 		} else {
-			self::addLog('warning','Директория `'.$dir.'` ранее была создана');
+			self::addLog('warning','Директория `'.$dir.'` ранее была создана!');
 		}
 	}
 
