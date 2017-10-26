@@ -87,7 +87,7 @@
 <![endif]-->
 <script src="/skins/components/bower/jquery/dist/jquery.min.js"></script>
 <script src="/skins/components/bower/popper.js/dist/umd/popper.min.js"></script>
-<script src="/skins/components/bower/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/skins/components/bootstrap/bootstrap.min.js"></script>
 <script src="/vendor/schoolphp/library/Core/fw.min.js"></script>
 <script src="/skins<?php echo Core::$SKIN;?>/js/scripts.js"></script>
 <?php if(count(Core::$JS)) {echo '<script src="'.implode('"></script>'."\n".'<script src="',Core::$JS).'"></script>';} ?>
