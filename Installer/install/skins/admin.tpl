@@ -38,7 +38,7 @@
   <link rel="apple-touch-icon" sizes="120x120" href="/touch-icon-iphone-retina.png">
   <link rel="apple-touch-icon" sizes="152x152" href="/touch-icon-ipad-retina.png">
   <link href="/skins/components/bootstrap/bootstrap.min.css" rel="stylesheet">
-  <link href="/skins<?php echo Core::$SKIN;?>/css/admin.css" rel="stylesheet">
+  <link href="/skins<?php echo Core::$SKIN;?>/css/admin.min.css" rel="stylesheet">
   <?php if(count(Core::$CSS)) {echo '<link href="'.implode('" rel="stylesheet">'."\n".'<link href="',Core::$CSS).'" rel="stylesheet">';} ?>
   <script>
     var antixsrf = '<?php echo (isset($_SESSION['antixsrf']) ? $_SESSION['antixsrf'] : 'no'); ?>';
@@ -47,8 +47,9 @@
   <script src="/skins/components/bower/html5shiv/dist/html5shiv.min.js" defer></script>
   <script src="/skins/components/bower/respond/dest/respond.min.js" defer></script>
   <![endif]-->
-  <script src="/skins/components/bower/jquery/dist/jquery.min.js" defer></script>
-  <script src="/skins/components/bootstrap/bootstrap.min.js" defer></script>
+	<script src="/skins/components/bower/jquery/dist/jquery.min.js"></script>
+	<script src="/skins/components/bower/popper.js/dist/umd/popper.min.js"></script>
+	<script src="/skins/components/bootstrap/bootstrap.min.js"></script>
   <script src="/vendor/schoolphp/library/Core/fw.min.js" defer></script>
   <script src="/skins<?php echo Core::$SKIN;?>/js/scripts.js"></script>
   <?php if(count(Core::$JS)) {echo '<script src="'.implode('"></script>'."\n".'<script src="',Core::$JS).'"></script>';} ?>
