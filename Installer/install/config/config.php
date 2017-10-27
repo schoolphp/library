@@ -67,13 +67,9 @@ class Core {
 	];
 
 	static $SITEMAP = [];
-
-	/* Системное. НЕ трогать, если не шарите! */
 	static $DIRECTORY;
-	static $JS = [];
-	static $CSS = [];
 	static $END = '';
-	
+	static $TITLE = 'Главная страница';
 }
 
 Core::$DIRECTORY = getcwd();

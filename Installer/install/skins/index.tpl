@@ -77,7 +77,6 @@
 <link href="/skins/css/bootstrap.min.css" rel="stylesheet">
 <link href="/skins/css/end.min.css" rel="stylesheet">
 <link href="/skins/components/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
-<?php if(count(Core::$CSS)) {echo '<link href="'.implode('" rel="stylesheet">'."\n".'<link href="',Core::$CSS).'" rel="stylesheet">';} ?>
 <script>
 	var antixsrf = '<?php echo (isset($_SESSION['antixsrf']) ? $_SESSION['antixsrf'] : 'no'); ?>';
 </script>
@@ -90,7 +89,6 @@
 <script src="/skins/components/bootstrap/bootstrap.min.js"></script>
 <script src="/vendor/schoolphp/library/Core/fw.min.js"></script>
 <script src="/skins<?php echo Core::$SKIN;?>/js/scripts.js"></script>
-<?php if(count(Core::$JS)) {echo '<script src="'.implode('"></script>'."\n".'<script src="',Core::$JS).'"></script>';} ?>
 <?php echo Core::$END; ?>
 </body>
 </html>
