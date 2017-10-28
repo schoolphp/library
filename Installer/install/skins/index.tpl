@@ -63,21 +63,9 @@
 <footer>
 	Подвал сайта
 </footer>
-<?php /**
- * !Note:
- * Пожалуйста, пересоздайте новую версию bootstrap на SASS для будущей поддержи в новых версиях проекта!
- * Сейчас подключена бета версия, пересобранная:
- * 1) убираем normalize, так как мы используем другой. Я бы советовал последнюю версию закачать с официального сайта. Единственное я добавил в сборку: убрал отступы для абзацев и заголовков, добавил font-size и line-height для body!
- * 2) Убираем глобальные свойства для части тегов в некоторых sass файлах, такие как html, body, a, h1-h6, p и другие. Делается очень просто, достаточно все файлы по очереди открыть и просмотреть глазками, не более 10-15 минут!
-<link href="/skins/components/bower/bootstrap-new/scss/bootstrap.min.css" rel="stylesheet">
- * Ну а для самых ленивых я подключу ту самую старую сборку от версии 4.0.бета:
- * И ещё, не забудьте подключить клёвые шрифты, которые необходимо сказать будет с офф-сайта:
- * <link href="/skins/components/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
- */ ?>
 <link href="/skins/css/bootstrap.min.css" rel="stylesheet">
 <link href="/skins/css/end.min.css" rel="stylesheet">
-<link href="/skins/components/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
-<?php if(count(Core::$CSS)) {echo '<link href="'.implode('" rel="stylesheet">'."\n".'<link href="',Core::$CSS).'" rel="stylesheet">';} ?>
+<link href="/skins/components/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <script>
 	var antixsrf = '<?php echo (isset($_SESSION['antixsrf']) ? $_SESSION['antixsrf'] : 'no'); ?>';
 </script>
@@ -90,7 +78,6 @@
 <script src="/skins/components/bootstrap/bootstrap.min.js"></script>
 <script src="/vendor/schoolphp/library/Core/fw.min.js"></script>
 <script src="/skins<?php echo Core::$SKIN;?>/js/scripts.js"></script>
-<?php if(count(Core::$JS)) {echo '<script src="'.implode('"></script>'."\n".'<script src="',Core::$JS).'"></script>';} ?>
 <?php echo Core::$END; ?>
 </body>
 </html>

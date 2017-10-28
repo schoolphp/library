@@ -22,7 +22,10 @@ if (!my_session_start()) {
     session_regenerate_id();
 }
 
-class User extends \FW\User\User {}
+class User extends \FW\User\User {
+	static $avatar = '';
+	static $datas = ['id','role','login','avatar'];
+}
 User::start(isset($_SESSION['user']['id']) ? ['id' => (int)$_SESSION['user']['id']] : []);
 
 if(!isset($_SESSION['antixsrf'])) {

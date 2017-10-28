@@ -14,7 +14,7 @@
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no">
 	<meta name="robots" content="index, follow">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<?php if(Core::$LANGUAGE['status']) {foreach(Core::$LANGUAGE['allow'] as $v) { if($v != Core::$LANGUAGE['lang']) { ?>
 		<link rel="alternate" hreflang="<?php echo $v; ?>" href="<?php echo createUrl('this',false,$v); ?>">
 	<?php } } } ?>
@@ -38,9 +38,8 @@
 	<link rel="apple-touch-icon" sizes="120x120" href="/touch-icon-iphone-retina.png">
 	<link rel="apple-touch-icon" sizes="152x152" href="/touch-icon-ipad-retina.png">
 	<link href="/skins/components/bootstrap/bootstrap.min.css" rel="stylesheet">
-	<link href="/skins/components/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/skins/components/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 	<link href="/skins<?php echo Core::$SKIN;?>/css/admin.min.css" rel="stylesheet">
-	<?php if(count(Core::$CSS)) {echo '<link href="'.implode('" rel="stylesheet">'."\n".'<link href="',Core::$CSS).'" rel="stylesheet">';} ?>
 	<script>
 		var antixsrf = '<?php echo (isset($_SESSION['antixsrf']) ? $_SESSION['antixsrf'] : 'no'); ?>';
 	</script>
@@ -53,7 +52,6 @@
 	<script src="/skins/components/bootstrap/bootstrap.min.js"></script>
 	<script src="/vendor/schoolphp/library/Core/fw.min.js" defer></script>
 	<script src="/skins<?php echo Core::$SKIN;?>/js/scripts.js"></script>
-	<?php if(count(Core::$JS)) {echo '<script src="'.implode('"></script>'."\n".'<script src="',Core::$JS).'"></script>';} ?>
 </head>
 <body>
 <?php

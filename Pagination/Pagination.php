@@ -46,16 +46,16 @@ class Pagination {
 		$nav = '<ul class="pagination">';
 		
 		if(self::$curpage-self::$options['move'] > 1 && self::$options['begin']) {
-			if(self::$options['begin']) $nav .= '<li><a href="'.createUrl(['page'=>1],$clearget).'">'.$text['begin'].'</a></li>';
-			if(self::$options['before']) $nav .= '<li><a href="'.createUrl(['page' => (self::$curpage-self::$options['move'] - 1)],$clearget).'">'.$text['before'].'</a></li>';
-			if(self::$options['trash']) $nav .= '<li><span>...</span></li>';
+			if(self::$options['begin']) $nav .= '<li class="page-item"><a class="page-link" href="'.createUrl(['page'=>1],$clearget).'">'.$text['begin'].'</a></li>';
+			if(self::$options['before']) $nav .= '<li class="page-item"><a class="page-link" href="'.createUrl(['page' => (self::$curpage-self::$options['move'] - 1)],$clearget).'">'.$text['before'].'</a></li>';
+			if(self::$options['trash']) $nav .= '<li class="page-item"><span class="page-link">...</span></li>';
 		}
 		
 		for($i = self::$curpage-self::$options['move']; $i <= self::$curpage+self::$options['move']; ++$i) {
 			if($i == self::$curpage) {
-				$nav .= '<li class="active"><span>'.self::$curpage.'</span></li>';
+				$nav .= '<li class="page-item active"><span class="page-link">'.self::$curpage.'</span></li>';
 			} elseif($i > 0 && $i <= self::$pages) {
-				$nav .= '<li><a href="'.createUrl(['page' => $i],$clearget).'">'.$i.'</a></li>';
+				$nav .= '<li class="page-item"><a class="page-link" href="'.createUrl(['page' => $i],$clearget).'">'.$i.'</a></li>';
 			}
 		}
 		
@@ -67,9 +67,9 @@ class Pagination {
 		}
 
 		if(self::$curpage+self::$options['move'] < self::$pages) {
-			if(self::$options['trash']) $nav .= '<li><span>...</span></li>';
-			if(self::$options['next']) $nav .= '<li><a href="'.createUrl(['page' => (self::$curpage+self::$options['move'] + 1)],$clearget).'">'.$text['next'].'</a></li>';
-			if(self::$options['end']) $nav .= '<li><a href="'.createUrl(['page' => self::$pages],$clearget).'">'.$text['end'].'</a></li>';
+			if(self::$options['trash']) $nav .= '<li class="page-item"><span class="page-link">...</span></li>';
+			if(self::$options['next']) $nav .= '<li class="page-item"><a class="page-link" href="'.createUrl(['page' => (self::$curpage+self::$options['move'] + 1)],$clearget).'">'.$text['next'].'</a></li>';
+			if(self::$options['end']) $nav .= '<li class="page-item"><a class="page-link" href="'.createUrl(['page' => self::$pages],$clearget).'">'.$text['end'].'</a></li>';
 		}
 
 		$nav .= '</ul>';

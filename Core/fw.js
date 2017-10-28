@@ -2,12 +2,12 @@ var myTimeout = 15000;
 
 Storage.prototype.setObject = function(key, value) {
 	this.setItem(key, JSON.stringify(value));
-}
+};
 
 Storage.prototype.getObject = function(key) {
 	var value = this.getItem(key);
 	return value && JSON.parse(value);
-}
+};
 
 // Обеспечиваем поддержу XMLHttpRequest`а в IE
 var xmlVersions = new Array(
@@ -28,11 +28,11 @@ if( typeof XMLHttpRequest == "undefined" ) XMLHttpRequest = function() {
 
 // Собственно, сам наш обработчик. 
 function myErrHandler(message, url, line) {
-	var tmp = window.location.toString().split("/")
+	var tmp = window.location.toString().split("/");
 	var server_url = tmp[0] + '//' + tmp[2];
 	var params = "logJSErr=logJSErr&message="+message+'&url='+url+'&line='+line;
 	var req =  new XMLHttpRequest();
-	req.open('POST', server_url+'/jslogerror?ajax=1', true)
+	req.open('POST', server_url+'/jslogerror?ajax=1', true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	req.setRequestHeader("Content-length", params.length);
 	req.setRequestHeader("Connection", "close");
@@ -41,7 +41,7 @@ function myErrHandler(message, url, line) {
 	// функция должна возвратить true
 	return true;
 }
-window.onerror = myErrHandler;
+// window.onerror = myErrHandler;
 //назначаем обработчик для события onerror
 // ПОТОМ ВКЛЮЧИТЬ window.onerror = myErrHandler;
 
