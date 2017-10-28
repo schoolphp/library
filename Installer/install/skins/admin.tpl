@@ -38,7 +38,7 @@
 	<link rel="apple-touch-icon" sizes="120x120" href="/touch-icon-iphone-retina.png">
 	<link rel="apple-touch-icon" sizes="152x152" href="/touch-icon-ipad-retina.png">
 	<link href="/skins/components/bootstrap/bootstrap.min.css" rel="stylesheet">
-	<link href="/skins/components/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/skins/components/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 	<link href="/skins<?php echo Core::$SKIN;?>/css/admin.min.css" rel="stylesheet">
 	<script>
 		var antixsrf = '<?php echo (isset($_SESSION['antixsrf']) ? $_SESSION['antixsrf'] : 'no'); ?>';
