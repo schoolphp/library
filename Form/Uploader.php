@@ -18,6 +18,8 @@ class Uploader
 	public $minwidth = 200;
 	public $minheight = 150;
 
+	public $watermark = '/uploads/watermark.png';
+
 	public $save_origin = true;
 
 	private function setError($error) {
@@ -147,8 +149,8 @@ class Uploader
 		imagecopyresampled($thumb, $this->source, 0, 0, 0, 0, $width, $height, $this->img[0], $this->img[1]);
 			
 		if($watermark) {
-			$stamp = imagecreatefrompng(\Core::$ROOT.'/uploads/watermark/watermark_180.png');
-			$watermarksize = getimagesize(\Core::$ROOT.'/uploads/watermark/watermark_180.png');
+			$stamp = imagecreatefrompng(\Core::$ROOT.$this->watermark);
+			$watermarksize = getimagesize(\Core::$ROOT.$this->watermark);
 			$watermarkprop = 600/$beginwidth;
 			if($watermarkprop != 1) {
 				$targetImage = imagecreatetruecolor( $watermarksize[0]/$watermarkprop, $watermarksize[1]/$watermarkprop );   
