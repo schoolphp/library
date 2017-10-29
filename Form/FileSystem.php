@@ -2,13 +2,13 @@
 namespace FW\Form;
 
 class FileSystem {
-	public static function delTree($dir) { 
+	public static function delTree($dir):void {
 		if(is_dir($dir)) {
-			$files = array_diff(scandir($dir), array('.','..')); 
+			$files = array_diff(scandir($dir), ['.','..']);
 			foreach ($files as $file) { 
-				(is_dir("$dir/$file")) ? self::delTree("$dir/$file") : unlink("$dir/$file");
+				(is_dir($dir.'/'.$file)) ? self::delTree($dir.'/'.$file) : unlink($dir.'/'.$file);
 			} 
-			return rmdir($dir); 
+			rmdir($dir);
 		}
 	}
 }

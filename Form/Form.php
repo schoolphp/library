@@ -75,14 +75,14 @@ class Form extends FormSettings {
 			} else {
 				$xsrfkey = $_SESSION['antixsrf-form-'.$this->settings['name']];
 			}
-			$form['antixsrf'] = array(
+			$form['antixsrf'] = [
 				'title' => '',
 				'type' => 'hidden',
 				'value' => $_SESSION['antixsrf-form-'.$this->settings['name']],
-				'rules' => array(
+				'rules' => [
 					'antixsrf',
-				),
-			);
+				],
+			];
 			foreach($form as $k=>$v) {
 				if(!is_array($v)) {
 					if(!isset($this->template[$k]))

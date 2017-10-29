@@ -1,5 +1,5 @@
 <?php
-namespace FW\Alert\Alert;
+namespace FW\Alert;
 
 class Alert
 {
