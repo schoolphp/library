@@ -10,6 +10,9 @@ class MyErrorHandler {
 		'Undefined variable' => 'undefined_variable',
 	];
 	static public function handler($errno, $errstr, $errfile, $errline) {
+		if(!error_reporting()) {
+			return true;
+		}
 
 		if(self::$key > 3) {
 			return true;
