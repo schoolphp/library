@@ -38,7 +38,7 @@ class Uploader
 	}
 
 	public function uploadFile() {
-		
+
 	}
 
 	public function upload($file, $name = '') {
