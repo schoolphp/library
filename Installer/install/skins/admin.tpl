@@ -90,5 +90,6 @@ if(isAdmin()) { /* Login */ ?>
 <footer>
   Разработано на Fox and Wolf Framework &copy; <?=Core::$CREATED;?> | <a href="mailto:inpost@list.ru"><i class="fa fa-envelope-o" aria-hidden="true"></i> inpost@list.ru</a>
 </footer>
+<?php echo \Core::$END; ?>
 </body>
 </html>

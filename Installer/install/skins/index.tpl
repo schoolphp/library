@@ -78,6 +78,6 @@
 <script src="/skins/components/bootstrap/bootstrap.min.js"></script>
 <script src="/vendor/schoolphp/library/Core/fw.min.js"></script>
 <script src="/skins<?php echo Core::$SKIN;?>/js/scripts.js"></script>
-<?php echo Core::$END; ?>
+<?php echo \Core::$END; ?>
 </body>
 </html>
