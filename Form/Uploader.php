@@ -37,6 +37,10 @@ class Uploader
 		return true;
 	}
 
+	public function uploadFile() {
+		
+	}
+
 	public function upload($file, $name = '') {
 		$this->uploaded = true;
 		if(!empty($file['name'])) {
