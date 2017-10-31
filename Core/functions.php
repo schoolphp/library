@@ -246,7 +246,7 @@ function createUrl($url = '', $clearget = true, $lang = '') {
 				if(isset($url[$k])) {
 					$temp .= '/'.$url[$k];
 					unset($url[$k]);
-				} elseif(!empty($v['req']) || count($url)) {
+				} elseif(!empty($v['req']) || count($url) || isset($_GET[$k])) {
 					if(isset($_GET[$k])) {
 						$temp .= '/'.$_GET[$k];
 					} elseif(!empty($v['default'])) {
