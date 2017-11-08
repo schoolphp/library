@@ -1,4 +1,4 @@
-var myTimeout = 15000;
+var myTimeout = 12000;
 
 Storage.prototype.setObject = function(key, value) {
 	this.setItem(key, JSON.stringify(value));
