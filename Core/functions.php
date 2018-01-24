@@ -273,6 +273,7 @@ function redirect($link = '',$clearget = true) {
 	if (!headers_sent()) {
 		header("Location: ".$url);
 	} else {
+		header("Content-Security-Policy:default-src *; script-src * 'unsafe-inline';style-src * 'unsafe-inline';");
 		echo '<script>window.location.href="'.$url.'";</script><noscript><meta http-equiv="refresh" content="0;url='.$url.'"></noscript>';
 	}
 	exit;
