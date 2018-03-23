@@ -63,21 +63,17 @@
 <footer>
 	Подвал сайта
 </footer>
-<link href="/skins/css/bootstrap.min.css" rel="stylesheet">
+<link href="/skins/components/bootstrap/bootstrap.min.css" rel="stylesheet">
 <link href="/skins/css/end.min.css" rel="stylesheet">
-<link href="/skins/components/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="/skins/components/fontawesome-free-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
 <script>
 	var antixsrf = '<?php echo (isset($_SESSION['antixsrf']) ? $_SESSION['antixsrf'] : 'no'); ?>';
 </script>
-<!--[if lt IE 9]>
-<script src="/skins/components/bower/html5shiv/dist/html5shiv.min.js"></script>
-<script src="/skins/components/bower/respond/dest/respond.min.js"></script>
-<![endif]-->
-<script src="/skins/components/bower/jquery/dist/jquery.min.js"></script>
-<script src="/skins/components/bower/popper.js/dist/umd/popper.min.js"></script>
+<script src="/skins/components/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/skins/components/node_modules/popper.js/dist/umd/popper.min.js"></script>
 <script src="/skins/components/bootstrap/bootstrap.min.js"></script>
 <script src="/vendor/schoolphp/library/Core/fw.min.js"></script>
 <script src="/skins<?php echo Core::$SKIN;?>/js/scripts.js"></script>
-<?php echo \Core::$END; ?>
+<?php echo Core::$END; ?>
 </body>
 </html>

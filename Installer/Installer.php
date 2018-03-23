@@ -91,6 +91,8 @@ class Installer
 		self::makeDir('/logs');
 		self::makeDir('/library');
 		self::makeDir('/uploads/tmp');
+		self::makeDir('/uploads/avatar');
+		self::makeDir('/library/MailProxy');
 
 		if(!file_exists(self::$basedir.'/config/config.php')) {
 			if(!isset($_SESSION['created'],$_SESSION['db-login'],$_SESSION['db-pass'],$_SESSION['db-local'],
@@ -146,6 +148,7 @@ class Installer
 			self::addLog('warning','Файл `/.htaccess` ранее был создан');
 		}
 
+		self::copyFile('/uploads/avatar/admin.jpg');
 		self::copyFile('/language/ru.php');
 		self::copyFile('/config/sitemap_core.php');
 		self::copyFile('/modules/_allmodules.php');
@@ -166,6 +169,7 @@ class Installer
 		self::copyFile('/skins/css/normalize.less');
 		self::copyFile('/skins/css/normalize.min.css');
 		self::copyFile('/skins/css/bootstrap.min.css');
+		self::copyFile('/library/MailProxy/MailProxy.php');
 
 		self::copyFile('/skins/img/logo.jpg');
 		self::copyFile('/skins/img/logo2.jpg');
@@ -189,6 +193,8 @@ class Installer
 		self::copyFile('/config/sitemap_admin_core.php');
 		self::copyFile('/modules/admin/_allmodules.php');
 		self::copyModule('main',['main'],'admin/');
+		self::copyModule('administration',['c-s','localization','notes','phpinfo','set_localization','view'],'admin/');
+		self::copyModule('users',['accesses','authorization','change','groups-change','groups-view','view'],'admin/');
 		self::copyModule('modules',['main'],'admin/');
 		self::copyModule('static',['404'],'admin/');
 
@@ -291,7 +297,7 @@ class Installer
 			  `avatar` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
 			  `about` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
 			  PRIMARY KEY (`id`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 		")) {
 			self::addLog('error','Ошибка при работе с БД: '.$link->error);
 		} else {
@@ -301,14 +307,14 @@ class Installer
 		$res = $link->query("SELECT 1 FROM `fw_users`");
 		if(!$res->num_rows) {
 			if(!$link->query("
-			INSERT INTO `fw_users` SET
-			`login` = '".mysqli_real_escape_string($link, $_SESSION['login'])."',
-			`password` = '".password_hash($_SESSION['password'],PASSWORD_DEFAULT)."',
-			`date` = NOW(),
-			`access` = 1,
-			`role` = 'admin',
-			`about` = ''
-		")
+				INSERT INTO `fw_users` SET
+				`login` = '".mysqli_real_escape_string($link, $_SESSION['login'])."',
+				`password` = '".password_hash($_SESSION['password'],PASSWORD_DEFAULT)."',
+				`date` = NOW(),
+				`access` = 1,
+				`role` = 'admin',
+				`about` = ''
+			")
 			) {
 				self::addLog('error', 'Ошибка при работе с БД: '.$link->error);
 			}
@@ -329,7 +335,7 @@ class Installer
 			  PRIMARY KEY (`id`),
 			  KEY `date` (`date`),
 			  KEY `ip` (`ip`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 		")) {
 			self::addLog('error','Ошибка при работе с БД: '.$link->error);
 		} else {
@@ -351,6 +357,141 @@ class Installer
 		} else {
 			self::addLog('success', 'MySQL Таблица `fw_php_logs` создана');
 		}
+
+		if(!$link->query("
+			CREATE TABLE IF NOT EXISTS `fw_i18n_text` (
+				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+				`source` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`group` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`key` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`text-rus` text COLLATE utf8mb4_unicode_ci NOT NULL,
+				PRIMARY KEY (`id`),
+				UNIQUE KEY `main` (`source`,`group`,`key`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1
+		")) {
+			self::addLog('error','Ошибка при работе с БД: '.$link->error);
+		} else {
+			self::addLog('success', 'MySQL Таблица `fw_i18n_text` создана');
+			$link->query('
+				INSERT INTO `fw_i18n_text` (`id`, `source`, `group`, `key`, `text-rus`) VALUES
+				(1, "class", "\\FW\\Form\\Uploader", "File size is too large", "Размер файла превышает допустимый в {$x}"),
+				(2, "class", "\\FW\\Form\\Uploader", "File is not chosen or not uploaded", "Файл не был выбран или не был загружен"),
+				(3, "class", "\\FW\\Form\\Uploader", "Server error", "На сервере произошла ошибка. Повторите попытку позже."),
+				(4, "class", "\\FW\\Form\\Uploader", "File size is too small", "Размер файла слишком маленький: {$x}. Загрузите больше."),
+				(5, "class", "\\FW\\Form\\Uploader", "Files with such extension is not allowed", "Вы загрузили файл с расширением {$x}. Допустимо загружать файлы только с расширениями {$y}."),
+				(6, "class", "\\FW\\Form\\Uploader", "move_uploaded_file error", "Ошибка загрузки файла. Повторите попытку позже."),
+				(7, "class", "\\FW\\Form\\Uploader", "rename error", "Ошибка загрузки файла. Повторите попытку позже.")
+			');
+		}
+
+		if(!$link->query("
+			CREATE TABLE `fw_log` (
+				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+				`text` text COLLATE utf8mb4_unicode_ci NOT NULL,
+				`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`page` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+		")) {
+			self::addLog('error','Ошибка при работе с БД: '.$link->error);
+		} else {
+			self::addLog('success', 'MySQL Таблица `fw_log` создана');
+		}
+
+		if(!$link->query("
+			CREATE TABLE `fw_log_notification` (
+				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+				`icon` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`text` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+				`key` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`value` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+		")) {
+			self::addLog('error','Ошибка при работе с БД: '.$link->error);
+		} else {
+			self::addLog('success', 'MySQL Таблица `fw_log_notification` создана');
+		}
+
+
+		if(!$link->query("
+			CREATE TABLE `fw_log_timer` (
+				`timer` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				PRIMARY KEY (`timer`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+		")) {
+			self::addLog('error','Ошибка при работе с БД: '.$link->error);
+		} else {
+			self::addLog('success', 'MySQL Таблица `fw_log_timer` создана');
+			$link->query("
+				INSERT INTO `fw_log_timer` (`timer`) VALUES	('2018-02-01 05:38:55')
+			");
+		}
+
+
+		if(!$link->query("
+			CREATE TABLE `fw_users2groups` (
+				`user_id` int(11) NOT NULL,
+				`group_id` int(11) NOT NULL,
+				PRIMARY KEY (`user_id`,`group_id`),
+  				KEY `fk_fw_users_groups_id` (`group_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+		")) {
+			self::addLog('error','Ошибка при работе с БД: '.$link->error);
+		} else {
+			self::addLog('success', 'MySQL Таблица `fw_users2groups` создана');
+			$link->query("
+				INSERT INTO `fw_users2groups` (`user_id`, `group_id`) VALUES (1, 1)
+			");
+		}
+
+
+		if(!$link->query("
+			CREATE TABLE `fw_users_groups` (
+				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+				`title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+		")) {
+			self::addLog('error','Ошибка при работе с БД: '.$link->error);
+		} else {
+			self::addLog('success', 'MySQL Таблица `fw_users_groups` создана');
+			$link->query("
+				INSERT INTO `fw_users_groups` (`id`, `title`) VALUES (1, 'Admin')
+			");
+		}
+
+
+		if(!$link->query("
+			CREATE TABLE `fw_users_groups_rights` (
+				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+				`group_id` int(11) NOT NULL,
+				`right` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`type` enum('allow','deny') COLLATE utf8mb4_unicode_ci NOT NULL,
+				PRIMARY KEY (`id`),
+				KEY `fk_fw_users_groups` (`group_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+		")) {
+			self::addLog('error','Ошибка при работе с БД: '.$link->error);
+		} else {
+			self::addLog('success', 'MySQL Таблица `fw_users_groups_rights` создана');
+			$link->query("
+				INSERT INTO `fw_users_groups_rights` (`id`, `group_id`, `right`, `type`) VALUES (2, 1, '*', 'allow')
+			");
+		}
+
+		$link->query("
+			ALTER TABLE `fw_users2groups` ADD CONSTRAINT `fk_fw_users_groups_id` FOREIGN KEY (`group_id`) REFERENCES `fw_users_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+		");
+
+		$link->query("
+			ALTER TABLE `fw_users_groups_rights` ADD CONSTRAINT `fk_fw_users_groups` FOREIGN KEY (`group_id`) REFERENCES `fw_users_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+		");
+
 		return true;
 	}
 

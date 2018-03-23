@@ -1,0 +1,30 @@
+#localization {
+    font-size: 18px;
+}
+.group {
+    margin-left: 20px;
+    display: none;
+}
+.key {
+    margin-left: 40px;
+    display: none;
+}
+.local {
+    margin-left: 60px;
+    display: none;
+}
+.local span {
+    color: #afaeae;
+}
+.hidden {
+    display: none;
+}
+i, .save {
+    cursor: pointer;
+}
+i {
+    color: blue;
+}
+i:hover {
+    color: red;
+}
