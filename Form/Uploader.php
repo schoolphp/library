@@ -78,16 +78,18 @@ class Uploader
 		}
 
 		$this->img = getimagesize($file['tmp_name']);
-		$this->prop = $this->img[0]/$this->img[1];
-		if(($this->prop >= 1 && $this->prop > 5) || ($this->prop <= 1 && $this->prop < 0.2)) {
-			$this->setError('Incorrect file proportion');
-		}
+
 		if(!in_array($this->img['mime'],['image/jpeg','image/png']) || !in_array($file['type'],['image/jpeg','image/png'])) {
 			$this->setError('Incorrect file type');
 		} elseif($this->img[0] < $this->minwidth) {
 			$this->setError('Width of file is too small. Minimum require '.$this->minwidth.' px');
 		} elseif($this->img[1] < $this->minheight) {
 			$this->setError('Height of file is too small. Minimum require '.$this->minheight.' px');
+		}
+
+		$this->prop = $this->img[0]/$this->img[1];
+		if(($this->prop >= 1 && $this->prop > 5) || ($this->prop <= 1 && $this->prop < 0.2)) {
+			$this->setError('Incorrect file proportion');
 		}
 
 		$this->generateFileName($file['tmp_name'], $name);

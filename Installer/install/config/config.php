@@ -21,6 +21,7 @@ class Core {
 	static $ADMIN    = '$_POST["email"]';
 	static $NOREPLY  = '$_POST["email"]';
 	static $SITENAME = '$_POST["site-name"]';
+	static $ALARMMAIL = ['$_POST["email"]'];
 
 	static $EVENTS  = true;
 	static $SHORTLINK = true;
@@ -64,6 +65,10 @@ class Core {
 		'stop' => 0, // exit(); for everything notice or warning
 		'errlvl' => 2, // Errors-logged: 2 - All errors, 1 - Not user
 		'trace' => 0, // Save full TRACE
+		'sms' => false,
+		'sms_login' => '',
+		'sms_pass' => '',
+		'sms_phones' => '',
 	];
 
 	static $SITEMAP = [];
