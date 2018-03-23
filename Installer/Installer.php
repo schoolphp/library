@@ -313,6 +313,7 @@ class Installer
 				`date` = NOW(),
 				`access` = 1,
 				`role` = 'admin',
+				`avatar` = 'admin.jpg',
 				`about` = ''
 			")
 			) {
