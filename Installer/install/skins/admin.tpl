@@ -37,7 +37,7 @@
 	<link href="/skins/components/bootstrap/bootstrap.min.css" rel="stylesheet">
 	<link href="/skins/components/fontawesome-free-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald" rel="stylesheet">
-	<link href="/skins/css/admin.min.css<?=filemtime(\Core::$ROOT . '/skins/css/admin.min.css');?>" rel="stylesheet">
+	<link href="/skins/css/admin.min.css?<?=filemtime(\Core::$ROOT . '/skins/css/admin.min.css');?>" rel="stylesheet">
 	<?php echo \Core::$META['head']; ?>
 </head>
 <body>
