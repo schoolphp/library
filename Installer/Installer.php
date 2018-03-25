@@ -206,6 +206,12 @@ class Installer
 		self::copyFile('/modules/admin/administration/view/css/localization.css');
 		self::copyFile('/modules/admin/administration/view/js/localization.js');
 
+		self::makeDir('/modules/admin/users/view/css');
+		self::makeDir('/modules/admin/users/view/js');
+		self::copyFile('/modules/admin/users/view/css/view.css');
+		self::copyFile('/modules/admin/users/view/js/view.js');
+		self::copyFile('/modules/admin/users/view/js/change.js');
+
 		return true;
 	}
 
