@@ -387,7 +387,7 @@ class Installer
 		}
 
 		if(!$link->query("
-			CREATE TABLE `fw_log` (
+			CREATE TABLE IF NOT EXISTS `fw_log` (
 				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`text` text COLLATE utf8mb4_unicode_ci NOT NULL,
 				`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -402,7 +402,7 @@ class Installer
 		}
 
 		if(!$link->query("
-			CREATE TABLE `fw_log_notification` (
+			CREATE TABLE IF NOT EXISTS `fw_log_notification` (
 				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`icon` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
 				`title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -421,7 +421,7 @@ class Installer
 
 
 		if(!$link->query("
-			CREATE TABLE `fw_log_timer` (
+			CREATE TABLE IF NOT EXISTS `fw_log_timer` (
 				`timer` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				PRIMARY KEY (`timer`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
@@ -436,7 +436,7 @@ class Installer
 
 
 		if(!$link->query("
-			CREATE TABLE `fw_users2groups` (
+			CREATE TABLE IF NOT EXISTS `fw_users2groups` (
 				`user_id` int(11) NOT NULL,
 				`group_id` int(11) NOT NULL,
 				PRIMARY KEY (`user_id`,`group_id`),
@@ -453,7 +453,7 @@ class Installer
 
 
 		if(!$link->query("
-			CREATE TABLE `fw_users_groups` (
+			CREATE TABLE IF NOT EXISTS `fw_users_groups` (
 				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
 				PRIMARY KEY (`id`)
@@ -469,7 +469,7 @@ class Installer
 
 
 		if(!$link->query("
-			CREATE TABLE `fw_users_groups_rights` (
+			CREATE TABLE IF NOT EXISTS `fw_users_groups_rights` (
 				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`group_id` int(11) NOT NULL,
 				`right` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
