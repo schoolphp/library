@@ -93,6 +93,7 @@ class Installer
 		self::makeDir('/uploads/tmp');
 		self::makeDir('/uploads/avatar');
 		self::makeDir('/library/MailProxy');
+		self::makeDir('/library/Info');
 
 		if(!file_exists(self::$basedir.'/config/config.php')) {
 			if(!isset($_SESSION['created'],$_SESSION['db-login'],$_SESSION['db-pass'],$_SESSION['db-local'],
@@ -170,6 +171,7 @@ class Installer
 		self::copyFile('/skins/css/normalize.min.css');
 		self::copyFile('/skins/css/bootstrap.min.css');
 		self::copyFile('/library/MailProxy/MailProxy.php');
+		self::copyFile('/library/Info/Info.php');
 
 		self::copyFile('/skins/img/logo.jpg');
 		self::copyFile('/skins/img/logo2.jpg');
@@ -198,6 +200,11 @@ class Installer
 		self::copyModule('users',['accesses','authorization','change','groups-change','groups-view','view'],'admin/');
 		self::copyModule('modules',['main'],'admin/');
 		self::copyModule('static',['404'],'admin/');
+
+		self::makeDir('/modules/admin/administration/view/css');
+		self::makeDir('/modules/admin/administration/view/js');
+		self::copyFile('/modules/admin/administration/view/css/localization.css');
+		self::copyFile('/modules/admin/administration/view/js/localization.js');
 
 		return true;
 	}
@@ -297,6 +304,7 @@ class Installer
 			  `skype` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
 			  `avatar` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
 			  `about` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+			  `active` ENUM('active','not active','deleted') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
 			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 		")) {
@@ -387,7 +395,7 @@ class Installer
 		}
 
 		if(!$link->query("
-			CREATE TABLE `fw_log` (
+			CREATE TABLE IF NOT EXISTS `fw_log` (
 				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`text` text COLLATE utf8mb4_unicode_ci NOT NULL,
 				`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -402,7 +410,7 @@ class Installer
 		}
 
 		if(!$link->query("
-			CREATE TABLE `fw_log_notification` (
+			CREATE TABLE IF NOT EXISTS `fw_log_notification` (
 				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`icon` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
 				`title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -421,7 +429,7 @@ class Installer
 
 
 		if(!$link->query("
-			CREATE TABLE `fw_log_timer` (
+			CREATE TABLE IF NOT EXISTS `fw_log_timer` (
 				`timer` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				PRIMARY KEY (`timer`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
@@ -436,7 +444,7 @@ class Installer
 
 
 		if(!$link->query("
-			CREATE TABLE `fw_users2groups` (
+			CREATE TABLE IF NOT EXISTS `fw_users2groups` (
 				`user_id` int(11) NOT NULL,
 				`group_id` int(11) NOT NULL,
 				PRIMARY KEY (`user_id`,`group_id`),
@@ -453,7 +461,7 @@ class Installer
 
 
 		if(!$link->query("
-			CREATE TABLE `fw_users_groups` (
+			CREATE TABLE IF NOT EXISTS `fw_users_groups` (
 				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
 				PRIMARY KEY (`id`)
@@ -469,7 +477,7 @@ class Installer
 
 
 		if(!$link->query("
-			CREATE TABLE `fw_users_groups_rights` (
+			CREATE TABLE IF NOT EXISTS `fw_users_groups_rights` (
 				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`group_id` int(11) NOT NULL,
 				`right` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
