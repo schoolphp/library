@@ -539,6 +539,7 @@ class Installer
 			self::addLog('error','Ошибка при работе с БД: '.$link->error);
 		} else {
 			self::addLog('success', 'MySQL Таблица `fw_admin_actions_info` создана');
+
 			$link->query("
 				INSERT INTO `fw_admin_actions_info` (`id`, `url`, `table`, `rus`) VALUES
 				(1, '/admin/users/edit/', 'fw_users', 'пользователя'),
