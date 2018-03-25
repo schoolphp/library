@@ -508,6 +508,45 @@ class Installer
 			ALTER TABLE `fw_users_groups_rights` ADD CONSTRAINT `fk_fw_users_groups` FOREIGN KEY (`group_id`) REFERENCES `fw_users_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 		");
 
+
+		if(!$link->query("
+			CREATE TABLE IF NOT EXISTS `fw_admin_actions` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`user` int(11) NOT NULL,
+				`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`action` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`a_table` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`comment` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+		")) {
+			self::addLog('error','Ошибка при работе с БД: '.$link->error);
+		} else {
+			self::addLog('success', 'MySQL Таблица `fw_admin_actions` создана');
+		}
+
+
+		if(!$link->query("
+			CREATE TABLE IF NOT EXISTS `fw_admin_actions_info` (
+				`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+				`url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`table` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+				`rus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+		")) {
+			self::addLog('error','Ошибка при работе с БД: '.$link->error);
+		} else {
+			self::addLog('success', 'MySQL Таблица `fw_admin_actions_info` создана');
+			q("
+				INSERT INTO `fw_admin_actions_info` (`id`, `url`, `table`, `rus`) VALUES
+				(1, '/admin/users/edit/', 'fw_users', 'пользователя'),
+				(2, '/admin/task-manager/edit/', 'fw_tasks', 'задачи'),
+				(3, '/admin/administration/localization', 'fw_i18n_text', 'локализации')
+			");
+		}
+
 		return true;
 	}
 
