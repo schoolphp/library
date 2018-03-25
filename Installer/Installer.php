@@ -176,6 +176,7 @@ class Installer
 		self::copyFile('/skins/img/logo2-bg.jpg');
 		self::copyFile('/skins/js/scripts.js');
 		self::copyFile('/skins/js/scripts.min.js');
+		self::copyFile('/skins/js/admin.js');
 
 		self::copyFile('/logs/js.log');
 		self::copyFile('/logs/my.log');
