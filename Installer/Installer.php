@@ -20,7 +20,7 @@ class Installer
 		if(!file_exists(self::$basedir.'/skins/components/bootstrap/bootstrap.min.css')
 			|| !file_exists(self::$basedir.'/skins/components/node_modules/jquery/dist/jquery.min.js')
 		) {
-			self::addLog('error','Отсутствует Bootstrap или Jquery. Запусите bower для загрузки пакетов на сайт!');
+			self::addLog('error','Отсутствует Bootstrap или Jquery. Запусите NPM для загрузки пакетов на сайт!');
 		}
 		if(!isset($_SESSION['created'],$_SESSION['db-login'],$_SESSION['db-pass'],$_SESSION['db-local'],$_SESSION['db-name'],
 			$_SESSION['domain'],$_SESSION['site-name'],$_SESSION['email'],$_SESSION['login'],$_SESSION['password'],$_SESSION['htaccess']))
@@ -539,7 +539,7 @@ class Installer
 			self::addLog('error','Ошибка при работе с БД: '.$link->error);
 		} else {
 			self::addLog('success', 'MySQL Таблица `fw_admin_actions_info` создана');
-			q("
+			$link->query("
 				INSERT INTO `fw_admin_actions_info` (`id`, `url`, `table`, `rus`) VALUES
 				(1, '/admin/users/edit/', 'fw_users', 'пользователя'),
 				(2, '/admin/task-manager/edit/', 'fw_tasks', 'задачи'),
