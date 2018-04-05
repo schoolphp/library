@@ -10,6 +10,16 @@ class User {
 	static $autoupdate = true;
 	static function Start($auth = []) {
 		$called_class = get_called_class();
+
+		if(!count($auth) && isset($_COOKIE['autologinid'],$_COOKIE['autologinhash'])) {
+			$auth = new Authorization;
+			if(!$auth->authByHash($_COOKIE['autologinid'],$_COOKIE['autologinhash'])) {
+				Authorization::logout();
+				redirect('/');
+			}
+			$auth = ['id' => (int)$_SESSION['user']['id']];
+		}
+
 		if(count($auth)) {
 			$where = [];
 			foreach($auth as $k=>$v) {
@@ -35,12 +45,6 @@ class User {
 			}
 			if(count($row)) {
 				self::$data = $row;
-			}
-		} elseif(isset($_COOKIE['autologinid'],$_COOKIE['autologinhash'])) {
-			$auth = new Authorization;
-			if(!$auth->authByHash($_COOKIE['autologinid'],$_COOKIE['autologinhash'])) {
-				Authorization::logout();
-				redirect('/');
 			}
 		}
 
