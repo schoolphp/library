@@ -6,9 +6,11 @@ trait UploaderError
 	/**
 	 * @param string $error
 	 * @throws \Exception
+	 * @return bool
 	 */
-	static function setError(string $error)
+	protected function setError(String $error)
 	{
-		throw new \Exception(hc($this->basefilename) . '. ' . $error);
+		throw new \Exception($error);
+		return false;
 	}
 }

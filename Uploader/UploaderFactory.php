@@ -10,7 +10,7 @@ class UploaderFactory
 	 * @var array
 	 * @example если хотим ограничить типы, укажите $upload->setTypes('image') или $upload->setTypes('image,video,audio');
 	 */
-	private static $types = [
+	public $types = [
 		'image' => [
 			'jpg' => ['image/jpeg','image/pjpeg'],
 			'jpeg' => ['image/jpeg','image/pjpeg'],
@@ -43,97 +43,122 @@ class UploaderFactory
 		],
 	];
 
-	private static $sizes = [
+	private $sizes = [
 		'image' => '20000000',
 		'video' => '256000000',
 		'audio' => '20000000',
 		'doc' => '10000000'
 	];
 
-	static function setTypes($types)
+	public function setTypes($types)
 	{
-		foreach(self::$types as $k=>$v) {
+		foreach($this->types as $k=>$v) {
 			if(!in_array($k,$types)) {
-				unset(self::$types[$k]);
+				unset($this->types[$k]);
 			}
 		}
 	}
 
-	static function setSizes($sizes)
+	public function setSizes($sizes)
 	{
 		// Доделать!
 	}
 
+	private function generateRandomString():string {
+		$tmp = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+		$name = '';
+		$max = count($tmp)-1;
+		for($i=0;$i<9;++$i) {
+			$name .= $tmp[rand(0, $max)];
+		}
+		return $name;
+	}
+
 
 	// NAME, TYPE, SIZE, TMP_NAME, ERROR
-	static function init($file, $isUpload = true, $types = [], $sizes = [])
-	{
-		if(count($types)) self::setTypes($types);
-		if(count($sizes)) self::setSizes($sizes);
 
-		if($file['error'] === UPLOAD_ERR_NO_FILE) {
-			(new \FW\Log\Log)->error('Uploader: incorrect script using');
-			self::setError('Incorrect script using');
-		}
+	/**
+	 * @param $file
+	 * @param bool $isUpload
+	 * @param array $types
+	 * @param array $sizes
+	 * @return UploaderInterface
+	 * @throws \Exception
+	 */
+	public function init($file, $isUpload = true, $types = [], $sizes = [])
+	{
+		if(count($types)) $this->setTypes($types);
+		if(count($sizes)) $this->setSizes($sizes);
 
 		if(!file_exists($file['tmp_name'])) {
-			self::setError('File is not uploaded');
+			$this->setError('File is not uploaded');
 		}
 
-		switch ($file['error']) {
-			case UPLOAD_ERR_INI_SIZE: case UPLOAD_ERR_FORM_SIZE:
-				return self::setError('File size is too large');
-				break;
-			case UPLOAD_ERR_PARTIAL:
-				return self::setError('File is not chosen or not uploaded');
-				break;
-			case UPLOAD_ERR_NO_TMP_DIR:
-				(new \FW\Log\Log)->alert('Uploader: missing a temporary folder');
-				return self::setError('Server error: Missing a temporary folder');
-				break;
-			case UPLOAD_ERR_CANT_WRITE:
-				(new \FW\Log\Log)->alert('Uploader: cant write to disk');
-				return self::setError('Server error: Failed to write file to disk');
-				break;
-			case UPLOAD_ERR_EXTENSION:
-				(new \FW\Log\Log)->alert('Uploader: server extension error');
-				return self::setError('Server extension error');
-				break;
-			default:
-				return self::setError('Unknown server error');
-				break;
-		}
+		if(!empty($file['error'])) {
+			switch($file['error']) {
+				case UPLOAD_ERR_NO_FILE:
+					(new \FW\Log\Log)->error('Uploader: incorrect script using');
+					$this->setError('Incorrect script using');
+					break;
+				case UPLOAD_ERR_INI_SIZE:
+				case UPLOAD_ERR_FORM_SIZE:
+					return $this->setError('File size is too large');
+					break;
+				case UPLOAD_ERR_PARTIAL:
+					return $this->setError('File is not chosen or not uploaded');
+					break;
+				case UPLOAD_ERR_NO_TMP_DIR:
+					(new \FW\Log\Log)->alert('Uploader: missing a temporary folder');
 
-		$file['real_ext'] = pathinfo($file['tmp_name'], PATHINFO_EXTENSION);
+					return $this->setError('Server error: Missing a temporary folder');
+					break;
+				case UPLOAD_ERR_CANT_WRITE:
+					(new \FW\Log\Log)->alert('Uploader: cant write to disk');
+
+					return $this->setError('Server error: Failed to write file to disk');
+					break;
+				case UPLOAD_ERR_EXTENSION:
+					(new \FW\Log\Log)->alert('Uploader: server extension error');
+
+					return $this->setError('Server extension error');
+					break;
+				default:
+					return $this->setError('Unknown server error');
+					break;
+			}
+		}
+		$file['real_ext'] = pathinfo($file['name'], PATHINFO_EXTENSION);
 		$file['real_mime_type'] = mime_content_type($file['tmp_name']);
-		$tmp = $explode('/', $file['real_mime_type']);
+		$tmp = explode('/', $file['real_mime_type']);
 		$file['real_type'] = $tmp[0];
+		$file['file_name'] = $this->generateRandomString().'.'.$file['real_ext'];
 
-		if(!isset($sizes[$file['real_type']]) || filesize($file['tmp_name']) > $sizes[$file['real_type']]) {
-			return self::setError('File size is too large');
+		if(!isset($this->sizes[$file['real_type']]) || filesize($file['tmp_name']) > $this->sizes[$file['real_type']]) {
+			return $this->setError('File size is too large');
 		}
 
-		foreach(self::$types as $k=>$v) {
+		$file['tmp_destination'] = \Core::$ROOT.'/uploads/tmp/'.$file['file_name'];
+		foreach($this->types as $k=>$v) {
 			foreach($v as $k2=>$v2) {
 				if($k2 === $file['real_ext']) {
 					if(!in_array($file['real_mime_type'], $v2)) {
-						return self::setError('Incorrect file type');
+						return $this->setError('Incorrect file type');
 					} else {
 
 						if($isUpload) {
-							if(!move_uploaded_file($file['tmp_name'], \Core::$ROOT.'/uploads/tmp/'.$file['tmp_name'])) {
-								return self::setError('Imposible to upload file');
+							if(!move_uploaded_file($file['tmp_name'], $file['tmp_destination'])) {
+								return $this->setError('Imposible to upload file');
 							}
 							$file['tmp_name'] = \Core::$ROOT.'/uploads/tmp/'.$file['tmp_name'];
 						}
 
-						$class = 'Uploader'.ucfirst($file['real_type']);
+						$class = '\FW\Uploader\Uploader'.ucfirst($file['real_type']);
 						return new $class($file);
 					}
 				}
 			}
 		}
 
-		return self::setError('Incorrect extension');
+		return $this->setError('Incorrect extension');
 	}
 }

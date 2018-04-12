@@ -10,9 +10,17 @@ class UploaderImage implements UploaderInterface
 	public $minheight = 150;
 
 	public function __construct($file) {
-		parent::__construct($file);
-
-		$this->img = getimagesize($file['tmp_name']);
+		$this->img = getimagesize($file['tmp_destination']);
+		if('image/jpeg' === $this->img['mime']) {
+			$this->source = imagecreatefromjpeg($file['tmp_destination']);
+		} elseif('image/png' === $this->img['mime']) {
+			$this->source = imagecreatefrompng($file['tmp_destination']);
+		} elseif('image/gif' === $this->img['mime']) {
+			$this->source = imagecreatefromgif($file['tmp_destination']);
+		} else {
+			$this->setError('Incorrect file mime type');
+		}
+		$this->filename = $file['file_name'];
 		$this->prop = $this->img[0]/$this->img[1];
 		if($this->prop > 5 || $this->prop < 0.2) {
 			$this->setError('Incorrect file proportion');
@@ -32,7 +40,7 @@ class UploaderImage implements UploaderInterface
 		return true;
 	}
 
-	public function resize($width,$height,$to,$watermark = false) {
+	public function save($width,$height,$to = '/uploads',$watermark = false):bool {
 		$beginwidth = $width;
 		if(empty($this->filename) || empty($this->prop) || !is_array($this->img) || !$this->source) {
 			$this->setError('File is not included to resize');
@@ -71,7 +79,7 @@ class UploaderImage implements UploaderInterface
 			imagecopy($thumb, $stamp, $width - $sx - $marge_right, $height - $sy - $marge_bottom, 0, 0, $sx, $sy);
 		}
 
-		imagejpeg($thumb,\Core::$ROOT.'/uploads/'.$to.'/'.$this->filename,100);
+		imagejpeg($thumb,\Core::$ROOT.$to.'/'.$this->filename,100);
 		imagedestroy($thumb);
 		return true;
 	}
