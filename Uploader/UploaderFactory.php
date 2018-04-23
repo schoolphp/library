@@ -41,7 +41,7 @@ class UploaderFactory
 			'm4b' => ['audio/mp4'],
 			'flac' => ['audio/flac'],
 			'webm' => ['audio/webm'],
-			'wma' => ['audio/x-ms-wma'],
+			'wma' => ['audio/x-ms-wma','video/x-ms-asf'],
 		],
 		'doc' => [
 			'doc' => ['application/msword'],
@@ -158,6 +158,7 @@ class UploaderFactory
 					}
 
 					$file['real_ext'] = $k2;
+					$file['real_type'] = $k;
 
 					$file['file_name'] = $this->generateRandomString().'.'.$file['real_ext'];
 					if($isUpload) {
