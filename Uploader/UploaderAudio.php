@@ -6,8 +6,6 @@ class UploaderAudio
 	use UploaderLibrary, UploaderError;
 
 	public $quality = 80;
-	public $ffmpeg_path = 'ffmpeg';
-	public $destination = '';
 
 	public function __construct($file,$options) {
 		$this->filename = $file['file_name'];

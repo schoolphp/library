@@ -9,8 +9,10 @@ trait UploaderLibrary
 	private $prop;
 	private $uploaded = false;
 	private $source;
+	public $ffmpeg_path = 'ffmpeg';
 
 	protected $filename = '';
+	protected $destination = '';
 
 	public $subdir = '';
 	public $tmpfilename = '';
