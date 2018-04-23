@@ -14,11 +14,9 @@ class UploaderFactory
 		'image' => [
 			'jpg' => ['image/jpeg','image/pjpeg'],
 			'jpeg' => ['image/jpeg','image/pjpeg'],
-			'gif' => ['image/gif'],
 			'png' => ['image/png'],
-			'tif' => ['image/tiff'],
-			'tiff' => ['image/tiff'],
-			'webp' => ['image/webp']
+			'gif' => ['image/gif'],
+			'bmp' => ['image/bmp', 'image/x-bmp', 'image/x-bitmap', 'image/x-xbitmap', 'image/x-win-bitmap', 'image/x-windows-bmp', 'image/ms-bmp', 'image/x-ms-bmp', 'application/bmp', 'application/x-bmp', 'application/x-win-bitmap'],
 		],
 		'video' => [
 			'mp4' => ['video/mp4'],
@@ -30,11 +28,20 @@ class UploaderFactory
 
 		],
 		'audio' => [
-			'mp3' => ['audio/mp4'],
+			'mp3' => ['audio/mp4','audio/mpeg'],
+			'mpeg' => ['audio/mpeg'],
 			'acc' => ['audio/aac'],
 			'wav' => ['audio/wav','audio/x-wav'],
-			'oga' => ['audio/ogg'],
-			'weba' => ['audio/webm']
+			'oga' => ['audio/ogg', 'audio/vorbis'],
+			'ogg' => ['audio/ogg', 'audio/vorbis'],
+			'opus' => ['audio/ogg'],
+			'weba' => ['audio/webm'],
+			'm3u8' => ['audio/mpegurl'],
+			'm4a' => ['audio/mp4'],
+			'm4b' => ['audio/mp4'],
+			'flac' => ['audio/flac'],
+			'webm' => ['audio/webm'],
+			'wma' => ['audio/x-ms-wma'],
 		],
 		'doc' => [
 			'doc' => ['application/msword'],
@@ -42,6 +49,7 @@ class UploaderFactory
 			'rtf' => ['application/rtf']
 		],
 	];
+
 
 	private $sizes = [
 		'image' => '20000000',
@@ -66,9 +74,9 @@ class UploaderFactory
 
 	private function generateRandomString():string {
 		$tmp = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
-		$name = '';
+		$name = time();
 		$max = count($tmp)-1;
-		for($i=0;$i<9;++$i) {
+		for($i=0;$i<6;++$i) {
 			$name .= $tmp[rand(0, $max)];
 		}
 		return $name;
@@ -81,20 +89,27 @@ class UploaderFactory
 	 * @param $file
 	 * @param bool $isUpload
 	 * @param array $types
-	 * @param array $sizes
-	 * @return UploaderInterface
+	 * @param array $options
+	 * @return UploaderInterface|UploaderLibrary
 	 * @throws \Exception
 	 */
-	public function init($file, $isUpload = true, $types = [], $sizes = [])
+	public function init($file, $isUpload = true, $types = [], $options = [])
 	{
 		if(count($types)) $this->setTypes($types);
-		if(count($sizes)) $this->setSizes($sizes);
+		if(isset($options['sizes'])) $this->setSizes($options['sizes']);
+
+		if(!$isUpload) {
+			$file = [
+				'tmp_name' => $file,
+				'name' => $file
+			];
+		}
 
 		if(!file_exists($file['tmp_name'])) {
 			$this->setError('File is not uploaded');
 		}
 
-		if(!empty($file['error'])) {
+		if(!empty($file['error']) && $isUpload) {
 			switch($file['error']) {
 				case UPLOAD_ERR_NO_FILE:
 					(new \FW\Log\Log)->error('Uploader: incorrect script using');
@@ -127,38 +142,40 @@ class UploaderFactory
 					break;
 			}
 		}
-		$file['real_ext'] = pathinfo($file['name'], PATHINFO_EXTENSION);
-		$file['real_mime_type'] = mime_content_type($file['tmp_name']);
+		$file['real_ext'] = mb_strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+		$file['real_mime_type'] = mb_strtolower(mime_content_type($file['tmp_name']));
 		$tmp = explode('/', $file['real_mime_type']);
 		$file['real_type'] = $tmp[0];
-		$file['file_name'] = $this->generateRandomString().'.'.$file['real_ext'];
 
 		if(!isset($this->sizes[$file['real_type']]) || filesize($file['tmp_name']) > $this->sizes[$file['real_type']]) {
 			return $this->setError('File size is too large');
 		}
-
-		$file['tmp_destination'] = \Core::$ROOT.'/uploads/tmp/'.$file['file_name'];
 		foreach($this->types as $k=>$v) {
 			foreach($v as $k2=>$v2) {
-				if($k2 === $file['real_ext']) {
-					if(!in_array($file['real_mime_type'], $v2)) {
-						return $this->setError('Incorrect file type');
-					} else {
-
-						if($isUpload) {
-							if(!move_uploaded_file($file['tmp_name'], $file['tmp_destination'])) {
-								return $this->setError('Imposible to upload file');
-							}
-							$file['tmp_name'] = \Core::$ROOT.'/uploads/tmp/'.$file['tmp_name'];
-						}
-
-						$class = '\FW\Uploader\Uploader'.ucfirst($file['real_type']);
-						return new $class($file);
+				if(in_array($file['real_mime_type'], $v2)) {
+					if(!isset($v[$file['real_ext']])) {
+						return $this->setError('Incorrect extension: '.$file['real_ext'].' or mime-type: '.$file['real_mime_type']);
 					}
+
+					$file['real_ext'] = $k2;
+
+					$file['file_name'] = $this->generateRandomString().'.'.$file['real_ext'];
+					if($isUpload) {
+						$file['tmp_destination'] = \Core::$ROOT.'/uploads/tmp/'.$file['file_name'];
+						if(!move_uploaded_file($file['tmp_name'], $file['tmp_destination'])) {
+							return $this->setError('Imposible to upload file');
+						}
+						$file['tmp_name'] = \Core::$ROOT.'/uploads/tmp/'.$file['tmp_name'];
+					} else {
+						$file['tmp_destination'] = $file['tmp_name'];
+					}
+
+					$class = '\FW\Uploader\Uploader'.ucfirst($file['real_type']);
+					return new $class($file, $options);
 				}
 			}
 		}
 
-		return $this->setError('Incorrect extension');
+		return $this->setError('Incorrect extension: '.$file['real_ext'].' or mime-type: '.$file['real_mime_type']);
 	}
 }

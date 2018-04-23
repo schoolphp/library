@@ -8,17 +8,30 @@ class UploaderImage implements UploaderInterface
 	public $watermark = '/uploads/watermark.png';
 	public $minwidth = 200;
 	public $minheight = 150;
+	public $quality = 80;
 
-	public function __construct($file) {
+	public function __construct($file,$options) {
+		if(isset($options['minwidth'])) {
+			$this->minwidth = $options['minwidth'];
+		}
+		if(isset($options['minheight'])) {
+			$this->minheight = $options['minheight'];
+		}
+		if(isset($options['quality'])) {
+			$this->quality = $options['quality'];
+		}
+
 		$this->img = getimagesize($file['tmp_destination']);
-		if('image/jpeg' === $this->img['mime']) {
+		if(in_array($file['real_ext'], ['jpg','jpeg'])) {
 			$this->source = imagecreatefromjpeg($file['tmp_destination']);
-		} elseif('image/png' === $this->img['mime']) {
+		} elseif($file['real_ext'] === 'png') {
 			$this->source = imagecreatefrompng($file['tmp_destination']);
-		} elseif('image/gif' === $this->img['mime']) {
+		} elseif($file['real_ext'] === 'gif') {
 			$this->source = imagecreatefromgif($file['tmp_destination']);
+		} elseif($file['real_ext'] === 'bmp') {
+			$this->source = imagecreatefrombmp($file['tmp_destination']);
 		} else {
-			$this->setError('Incorrect file mime type');
+			$this->setError('Incorrect file mime type: '.$this->img['mime']);
 		}
 		$this->filename = $file['file_name'];
 		$this->prop = $this->img[0]/$this->img[1];
@@ -31,13 +44,6 @@ class UploaderImage implements UploaderInterface
 		} elseif($this->img[1] < $this->minheight) {
 			$this->setError('Height of file is too small. Minimum require '.$this->minheight.' px');
 		}
-	}
-
-	public function upload():bool
-	{
-
-
-		return true;
 	}
 
 	public function save($width,$height,$to = '/uploads',$watermark = false):bool {
@@ -58,28 +64,16 @@ class UploaderImage implements UploaderInterface
 
 		if($watermark) {
 			$stamp = imagecreatefrompng(\Core::$ROOT.$this->watermark);
-			$watermarksize = getimagesize(\Core::$ROOT.$this->watermark);
-			$watermarkprop = 600/$beginwidth;
-			if($watermarkprop != 1) {
-				$targetImage = imagecreatetruecolor( $watermarksize[0]/$watermarkprop, $watermarksize[1]/$watermarkprop );
-				imagealphablending( $targetImage, false );
-				imagesavealpha( $targetImage, true );
 
-				imagecopyresampled( $targetImage, $stamp,
-					0, 0,
-					0, 0,
-					$watermarksize[0]/$watermarkprop, $watermarksize[1]/$watermarkprop,
-					$watermarksize[0], $watermarksize[1]);
-				$stamp = $targetImage;
-			}
-			$marge_right = 5;
-			$marge_bottom = 5;
+			$marge_right = 10;
+			$marge_bottom = 10;
 			$sx = imagesx($stamp);
 			$sy = imagesy($stamp);
-			imagecopy($thumb, $stamp, $width - $sx - $marge_right, $height - $sy - $marge_bottom, 0, 0, $sx, $sy);
+
+			imagecopy($thumb, $stamp, $width - $sx - $marge_right, $height - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
 		}
 
-		imagejpeg($thumb,\Core::$ROOT.$to.'/'.$this->filename,100);
+		imagejpeg($thumb,\Core::$ROOT.$to.'/'.$this->filename, $this->quality);
 		imagedestroy($thumb);
 		return true;
 	}

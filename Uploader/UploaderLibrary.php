@@ -10,9 +10,11 @@ trait UploaderLibrary
 	private $uploaded = false;
 	private $source;
 
+	protected $filename = '';
+
 	public $subdir = '';
 	public $tmpfilename = '';
-	public $filename = '';
+
 	public $error = '';
 	public $notuploaded = false;
 
@@ -21,6 +23,14 @@ trait UploaderLibrary
 	public function __construct($file)
 	{
 		$this->file = $file;
+	}
+
+	public function getFilename():string {
+		return $this->filename;
+	}
+
+	public function setFilename(string $filename):void {
+		$this->filename = basename($filename);
 	}
 
 	public function __destruct()
