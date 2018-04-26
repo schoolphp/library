@@ -66,7 +66,7 @@ class UploaderFactory
 			'odm' => ['application/vnd.oasis.opendocument.text-master'],
 			'oth' => ['application/vnd.oasis.opendocument.text-web'],
 			'rtf' => ['application/rtf'],
-			'rar' => ['application/x-rar-compressed', 'application/octet-stream'],
+			'rar' => ['application/x-rar-compressed', 'application/octet-stream', 'application/x-rar'],
 			'zip' => ['application/zip', 'application/octet-stream'],
 			'gzip' => ['application/gzip'],
 			'tar' => ['application/x-tar'],
@@ -79,7 +79,8 @@ class UploaderFactory
 		'image' => '20000000',
 		'video' => '256000000',
 		'audio' => '20000000',
-		'doc' => '10000000'
+		'doc' => '100000000',
+		'application' => '100000000'
 	];
 
 	public function setTypes($types)
@@ -172,6 +173,8 @@ class UploaderFactory
 		$file['real_type'] = $tmp[0];
 
 		if(!isset($this->sizes[$file['real_type']]) || filesize($file['tmp_name']) > $this->sizes[$file['real_type']]) {
+			echo $file['real_mime_type'];
+			exit;
 			return $this->setError('File size is too large');
 		}
 		foreach($this->types as $k=>$v) {

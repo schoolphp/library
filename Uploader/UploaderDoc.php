@@ -1,7 +1,7 @@
 <?php
 namespace FW\Uploader;
 
-class UploaderPhoto
+class UploaderDoc
 {
 	use UploaderLibrary, UploaderError;
 
@@ -9,6 +9,7 @@ class UploaderPhoto
 		$this->filename = $file['file_name'];
 		$this->destination = $file['tmp_destination'];
 
+		/*
 		if(in_array($file['real_ext'],['zip','rar'])) {
 			$bytes = file_get_contents($file['destination'], false, null, 0, 7);
 
@@ -20,6 +21,7 @@ class UploaderPhoto
 				$this->setError('It`s not a ZIP archive');
 			}
 		}
+		*/
 	}
 
 	function save($to):bool {
