@@ -12,16 +12,20 @@ class UploaderAudio
 		$this->destination = $file['tmp_destination'];
 	}
 
-	public function save($to = '/uploads', $types = 'all'):bool {
+	public function save($to = '/uploads', $options = []):bool {
 		if(!function_exists('exec')) {
 			$this->setError('exec is disabled');
 		}
 
-		if(in_array($types,['all','mp3'])) {
+		if(!isset($options['audio_type'])) {
+			$options['audio_type'] = 'all';
+		}
+
+		if(in_array($options['audio_type'],['all','mp3'])) {
 			exec($this->ffmpeg_path.' -i '.$this->destination.' -vn -ar 22050 -ac 2 -ab 48 -f mp3 '.\Core::$ROOT.$to.preg_replace('#\.[a-z0-9]+$#','.mp3', $this->filename));
 		}
 
-		if(in_array($types,['all','ogg'])) {
+		if(in_array($options['audio_type'],['all','ogg'])) {
 			exec($this->ffmpeg_path.' -i '.$this->destination.' -vn -ar 22050 -ac 2 -f ogg '.\Core::$ROOT.$to.'ogg/'.preg_replace('#\.[a-z0-9]+$#','.ogg', $this->filename));
 		}
 

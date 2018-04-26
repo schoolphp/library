@@ -46,23 +46,31 @@ class UploaderImage implements UploaderInterface
 		}
 	}
 
-	public function save($width,$height,$to = '/uploads',$watermark = false):bool {
-		$beginwidth = $width;
+	public function save($to, $options = []):bool {
 		if(empty($this->filename) || empty($this->prop) || !is_array($this->img) || !$this->source) {
 			$this->setError('File is not included to resize');
 		}
 
-		$tmp = $width/$this->prop;
-		if($tmp > $height) {
-			$width = round($height*$this->prop);
-		} else {
-			$height = round($tmp);
+
+		$width = $this->img[0];
+		$height = $this->img[1];
+		if((isset($options['photo_width']) && $options['photo_width'] > $this->img[0]) || (isset($options['photo_height']) && $options['photo_height'] > $this->img[1])) {
+
+			if(isset($options['photo_width']) && $options['photo_width'] > $this->img[0]) {
+				$width = round($options['photo_width']);
+				$height = round($options['photo_width'] / $this->prop);
+			}
+
+			if(isset($options['photo_height']) && $options['photo_height'] > $this->img[1]) {
+				$height = round($options['photo_height']);
+				$width = round($options['photo_height'] * $this->prop);
+			}
 		}
 
 		$thumb = imagecreatetruecolor($width, $height);
 		imagecopyresampled($thumb, $this->source, 0, 0, 0, 0, $width, $height, $this->img[0], $this->img[1]);
 
-		if($watermark) {
+		if(!empty($options['photo_watermark'])) {
 			$stamp = imagecreatefrompng(\Core::$ROOT.$this->watermark);
 
 			$marge_right = 10;
