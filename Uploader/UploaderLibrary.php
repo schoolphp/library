@@ -31,8 +31,25 @@ trait UploaderLibrary
 		return $this->filename;
 	}
 
-	public function setFilename(string $filename):void {
-		$this->filename = basename($filename);
+	public function setFilename(string $filename, string $directory = ''):void {
+		$filename = basename($filename);
+		$filename = $this->translit($filename);
+		$filename = preg_replace('#[\s_]+#ui', '-', $filename);
+		$filename = preg_replace('#\-{2,}#ui', '-', $filename);
+
+		if(!empty($directory)) {
+			$tmp = pathinfo($filename);
+			$i = 0;
+			do {
+				$filename = \Core::$ROOT.$directory.$tmp['filename'].(!empty($i) ? '-'.$i : '').'.'.$tmp['extension'];
+				if(!file_exists($filename)) {
+					++$i;
+					break;
+				}
+			} while(true);
+		}
+
+		$this->filename = $filename;
 	}
 
 	public function __destruct()

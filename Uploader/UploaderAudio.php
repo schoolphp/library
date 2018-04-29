@@ -22,7 +22,7 @@ class UploaderAudio
 		}
 
 		if(in_array($options['audio_type'],['all','mp3'])) {
-			exec($this->ffmpeg_path.' -i '.$this->destination.' -vn -ar 22050 -ac 2 -ab 48 -f mp3 '.\Core::$ROOT.$to.preg_replace('#\.[a-z0-9]+$#','.mp3', $this->filename));
+			exec($this->ffmpeg_path.' -i '.$this->destination.' -vn -ar 22050 -ac 2 -ab 48 -f mp3 '.\Core::$ROOT.$to.'mp3/'.preg_replace('#\.[a-z0-9]+$#','.mp3', $this->filename));
 		}
 
 		if(in_array($options['audio_type'],['all','ogg'])) {
