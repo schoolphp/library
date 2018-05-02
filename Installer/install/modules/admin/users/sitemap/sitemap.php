@@ -35,11 +35,6 @@ return [
 		],
 	],
 	'groups-view' => [],
-    'accesses' => [
-        'id' => [
-            'type' => 'int'
-        ],
-    ],
     'authorization' => [
         'id' => [
             'req' => 1,
