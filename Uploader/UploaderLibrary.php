@@ -41,8 +41,8 @@ trait UploaderLibrary
 			$tmp = pathinfo($filename);
 			$i = 0;
 			do {
-				$filename = \Core::$ROOT.$directory.$tmp['filename'].(!empty($i) ? '-'.$i : '').'.'.$tmp['extension'];
-				if(!file_exists($filename)) {
+				$filename = $tmp['filename'].(!empty($i) ? '-'.$i : '').'.'.$tmp['extension'];
+				if(!file_exists(\Core::$ROOT.$directory.$filename)) {
 					++$i;
 					break;
 				}
