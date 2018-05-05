@@ -54,14 +54,14 @@ class UploaderImage implements UploaderInterface
 
 		$width = $this->img[0];
 		$height = $this->img[1];
-		if((isset($options['photo_width']) && $options['photo_width'] > $this->img[0]) || (isset($options['photo_height']) && $options['photo_height'] > $this->img[1])) {
+		if((isset($options['photo_width']) && $options['photo_width'] < $this->img[0]) || (isset($options['photo_height']) && $options['photo_height'] < $this->img[1])) {
 
-			if(isset($options['photo_width']) && $options['photo_width'] > $this->img[0]) {
+			if(isset($options['photo_width']) && $options['photo_width'] < $this->img[0]) {
 				$width = round($options['photo_width']);
 				$height = round($options['photo_width'] / $this->prop);
 			}
 
-			if(isset($options['photo_height']) && $options['photo_height'] > $this->img[1]) {
+			if(isset($options['photo_height']) && $options['photo_height'] < $this->img[1]) {
 				$height = round($options['photo_height']);
 				$width = round($options['photo_height'] * $this->prop);
 			}
