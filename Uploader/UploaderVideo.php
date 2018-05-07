@@ -21,14 +21,26 @@ class UploaderVideo implements UploaderInterface
 		}
 
 		if(in_array($options['video_type'],['all','mp4'])) {
+			if(!is_dir(\Core::$ROOT.$to.'mp4/')) {
+				mkdir(\Core::$ROOT.$to.'mp4/', 0664, true);
+			}
+
 			exec($this->ffmpeg_path.' -i '.$this->destination.' -q:v 5 '.\Core::$ROOT.$to.'mp4/'.preg_replace('#\.[a-z0-9]+$#', '.mp4', $this->filename).' > /dev/null 2>/dev/null &');
 		}
 
 		if(in_array($options['video_type'],['all','webm'])) {
+			if(!is_dir(\Core::$ROOT.$to.'webm/')) {
+				mkdir(\Core::$ROOT.$to.'webm/', 0664, true);
+			}
+
 			exec($this->ffmpeg_path.' -i '.$this->destination.' -q:v 5 '.\Core::$ROOT.$to.'webm/'.preg_replace('#\.[a-z0-9]+$#', '.webm', $this->filename).' > /dev/null 2>/dev/null &');
 		}
 
 		if(in_array($options['video_type'],['all','ogg'])) {
+			if(!is_dir(\Core::$ROOT.$to.'ogg/')) {
+				mkdir(\Core::$ROOT.$to.'ogg/', 0664, true);
+			}
+
 			exec($this->ffmpeg_path.' -i '.$this->destination.' -q:v 5 '.\Core::$ROOT.$to.'ogg/'.preg_replace('#\.[a-z0-9]+$#', '.ogg', $this->filename).' > /dev/null 2>/dev/null &');
 		}
 

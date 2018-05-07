@@ -81,6 +81,10 @@ class UploaderImage implements UploaderInterface
 			imagecopy($thumb, $stamp, $width - $sx - $marge_right, $height - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
 		}
 
+		if(!is_dir(\Core::$ROOT.$to)) {
+			mkdir(\Core::$ROOT.$to, 0664, true);
+		}
+
 		imagejpeg($thumb,\Core::$ROOT.$to.'/'.$this->filename, $this->quality);
 		imagedestroy($thumb);
 		return true;
