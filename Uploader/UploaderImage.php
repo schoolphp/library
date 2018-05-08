@@ -114,7 +114,7 @@ class UploaderImage implements UploaderInterface
 		$name = pathinfo($this->filename, PATHINFO_FILENAME);
 		if(in_array($this->real_ext, ['png','gif']) && !isset($options['photo_force_jpg'])) {
 			$this->filename = $name.'.png';
-			imagepng($thumb, \Core::$ROOT.'/'.$to.'/'.$this->filename, $this->quality);
+			imagepng($thumb, \Core::$ROOT.'/'.$to.'/'.$this->filename);
 		} else {
 			$this->filename = $name.'.jpg';
 			imagejpeg($thumb, \Core::$ROOT.'/'.$to.'/'.$this->filename, $this->quality);
