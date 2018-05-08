@@ -26,6 +26,10 @@ class UploaderImage implements UploaderInterface
 			$this->source = imagecreatefromjpeg($file['tmp_destination']);
 		} elseif($file['real_ext'] === 'png') {
 			$this->source = imagecreatefrompng($file['tmp_destination']);
+			if(!isset($options['photo_no_transparent'])) {
+				imagealphablending($this->source, true);
+				imagesavealpha($this->source, true);
+			}
 		} elseif($file['real_ext'] === 'gif') {
 			$this->source = imagecreatefromgif($file['tmp_destination']);
 		} elseif($file['real_ext'] === 'bmp') {
@@ -47,10 +51,18 @@ class UploaderImage implements UploaderInterface
 	}
 
 	public function save($to, $options = []):bool {
+		if(!is_dir(\Core::$ROOT.$to)) {
+			mkdir(\Core::$ROOT.$to, 0664, true);
+		}
+
+		if(isset($options['photo_no_modify'])) {
+			copy($this->destination,\Core::$ROOT.$to.$this->filename);
+			return true;
+		}
+
 		if(empty($this->filename) || empty($this->prop) || !is_array($this->img) || !$this->source) {
 			$this->setError('File is not included to resize');
 		}
-
 
 		$width = $this->img[0];
 		$height = $this->img[1];
@@ -79,10 +91,6 @@ class UploaderImage implements UploaderInterface
 			$sy = imagesy($stamp);
 
 			imagecopy($thumb, $stamp, $width - $sx - $marge_right, $height - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
-		}
-
-		if(!is_dir(\Core::$ROOT.$to)) {
-			mkdir(\Core::$ROOT.$to, 0664, true);
 		}
 
 		imagejpeg($thumb,\Core::$ROOT.$to.'/'.$this->filename, $this->quality);
