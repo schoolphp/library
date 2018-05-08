@@ -39,6 +39,8 @@ class UploaderImage implements UploaderInterface
 		}
 
 		$this->filename = $file['file_name'];
+		$this->destination = $file['tmp_destination'];
+
 		$this->prop = $this->img[0]/$this->img[1];
 		if($this->prop > 5 || $this->prop < 0.2) {
 			$this->setError('Incorrect file proportion');
