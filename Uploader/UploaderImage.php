@@ -29,10 +29,6 @@ class UploaderImage implements UploaderInterface
 			$this->source = imagecreatefromjpeg($file['tmp_destination']);
 		} elseif($file['real_ext'] === 'png') {
 			$this->source = imagecreatefrompng($file['tmp_destination']);
-			if(!isset($options['photo_no_transparent'])) {
-				imagealphablending($this->source, true);
-				imagesavealpha($this->source, true);
-			}
 		} elseif($file['real_ext'] === 'gif') {
 			$this->source = imagecreatefromgif($file['tmp_destination']);
 		} elseif($file['real_ext'] === 'bmp') {
@@ -112,6 +108,10 @@ class UploaderImage implements UploaderInterface
 		$name = pathinfo($this->filename, PATHINFO_FILENAME);
 		if(in_array($this->real_ext, ['png','gif']) && !isset($options['photo_force_jpg'])) {
 			$this->filename = $name.'.png';
+			if(!isset($options['photo_no_transparent'])) {
+				imagealphablending($thumb, false);
+				imagesavealpha($thumb, true);
+			}
 			imagepng($thumb, \Core::$ROOT.'/'.$to.'/'.$this->filename, $this->quality);
 		} else {
 			$this->filename = $name.'.jpg';
