@@ -56,7 +56,7 @@ class UploaderImage implements UploaderInterface
 	/**
 	 * @param bool $to
 	 * @param array $options
-	 * @return $this|bool
+	 * @return $this
 	 * @throws \Exception
 	 */
 	public function save($to = false, $options = []) {
@@ -70,7 +70,7 @@ class UploaderImage implements UploaderInterface
 
 		if(isset($options['photo_no_modify'])) {
 			copy($this->destination,\Core::$ROOT.'/'.$to.$this->filename);
-			return true;
+			return $this;
 		}
 
 		if(empty($this->filename) || empty($this->prop) || !is_array($this->img) || !$this->source) {
