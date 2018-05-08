@@ -53,13 +53,23 @@ class UploaderImage implements UploaderInterface
 		}
 	}
 
-	public function save($to, $options = []):bool {
-		if(!is_dir(\Core::$ROOT.$to)) {
-			mkdir(\Core::$ROOT.$to, 0777, true);
+	/**
+	 * @param bool $to
+	 * @param array $options
+	 * @return $this|bool
+	 * @throws \Exception
+	 */
+	public function save($to = false, $options = []) {
+		if($to === false) {
+			$to = $this->directory;
+		}
+
+		if(!is_dir(\Core::$ROOT.'/'.$to)) {
+			mkdir(\Core::$ROOT.'/'.$to, 0777, true);
 		}
 
 		if(isset($options['photo_no_modify'])) {
-			copy($this->destination,\Core::$ROOT.$to.$this->filename);
+			copy($this->destination,\Core::$ROOT.'/'.$to.$this->filename);
 			return true;
 		}
 
@@ -96,8 +106,8 @@ class UploaderImage implements UploaderInterface
 			imagecopy($thumb, $stamp, $width - $sx - $marge_right, $height - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
 		}
 
-		imagejpeg($thumb,\Core::$ROOT.$to.'/'.$this->filename, $this->quality);
+		imagejpeg($thumb,\Core::$ROOT.'/'.$to.'/'.$this->filename, $this->quality);
 		imagedestroy($thumb);
-		return true;
+		return $this;
 	}
 }

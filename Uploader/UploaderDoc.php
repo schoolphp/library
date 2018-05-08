@@ -24,13 +24,21 @@ class UploaderDoc
 		*/
 	}
 
-	function save($to):bool {
-		if(!is_dir(\Core::$ROOT.$to)) {
-			mkdir(\Core::$ROOT.$to, 0777, true);
+	/**
+	 * @param bool $to
+	 * @return $this
+	 */
+	function save($to = false) {
+		if($to === false) {
+			$to = $this->directory;
 		}
 
-		copy($this->destination,\Core::$ROOT.$to.$this->filename);
-		return true;
+		if(!is_dir(\Core::$ROOT.'/'.$to)) {
+			mkdir(\Core::$ROOT.'/'.$to, 0777, true);
+		}
+
+		copy($this->destination,\Core::$ROOT.'/'.$to.'/'.$this->filename);
+		return $this;
 	}
 
 }

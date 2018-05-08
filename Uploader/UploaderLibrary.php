@@ -22,6 +22,17 @@ trait UploaderLibrary
 
 	public $save_origin = true;
 
+	protected $directory = 'uploads/';
+
+	/**
+	 * @param $to
+	 * @return $this
+	 */
+	public function setDirectory($to) {
+		$this->directory = $to;
+		return $this;
+	}
+
 	public function __construct($file)
 	{
 		$this->file = $file;
@@ -31,25 +42,39 @@ trait UploaderLibrary
 		return $this->filename;
 	}
 
-	public function setFilename(string $filename, string $directory = ''):void {
+	/**
+	 * @param string $filename
+	 * @return $this
+	 */
+	public function setFilename(string $filename) {
 		$filename = basename($filename);
 		$filename = $this->translit($filename);
 		$filename = preg_replace('#[\s_]+#ui', '-', $filename);
 		$filename = preg_replace('#\-{2,}#ui', '-', $filename);
 
-		if(!empty($directory)) {
-			$tmp = pathinfo($filename);
-			$i = 0;
-			do {
-				$filename = $tmp['filename'].(!empty($i) ? '-'.$i : '').'.'.$tmp['extension'];
-				if(!file_exists(\Core::$ROOT.$directory.$filename)) {
-					break;
-				}
-				++$i;
-			} while(true);
+		$tmp = pathinfo($filename);
+
+		$classname = get_class($this);
+		$sub_dir = '';
+		if($classname === 'FW\Uploader\UploaderVideo') {
+			$tmp['extension'] = 'mp4';
+			$sub_dir = 'mp4/';
+		} elseif($classname === 'FW\Uploader\UploaderAudio') {
+			$tmp['extension'] = 'mp3';
+			$sub_dir = 'mp3/';
 		}
 
+		$i = 0;
+		do {
+			$filename = $tmp['filename'].(!empty($i) ? '-'.$i : '').'.'.$tmp['extension'];
+			if(!file_exists(\Core::$ROOT.'/'.$this->directory.'/'.$sub_dir.$filename)) {
+				break;
+			}
+			++$i;
+		} while(true);
+
 		$this->filename = $filename;
+		return $this;
 	}
 
 	public function __destruct()

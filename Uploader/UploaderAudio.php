@@ -12,7 +12,17 @@ class UploaderAudio
 		$this->destination = $file['tmp_destination'];
 	}
 
-	public function save($to = '/uploads', $options = []):bool {
+	/**
+	 * @param bool $to
+	 * @param array $options
+	 * @return $this
+	 * @throws \Exception
+	 */
+	public function save($to = false, $options = []) {
+		if($to === false) {
+			$to = $this->directory;
+		}
+
 		if(!function_exists('exec')) {
 			$this->setError('exec is disabled');
 		}
@@ -21,22 +31,20 @@ class UploaderAudio
 			$options['audio_type'] = 'all';
 		}
 
-		if(in_array($options['audio_type'],['all','mp3'])) {
-			if(!is_dir(\Core::$ROOT.$to.'mp3/')) {
-				mkdir(\Core::$ROOT.$to.'mp3/', 0777, true);
-			}
-
-			exec($this->ffmpeg_path.' -i '.$this->destination.' -vn -ar 22050 -ac 2 -ab 48 -f mp3 '.\Core::$ROOT.$to.'mp3/'.preg_replace('#\.[a-z0-9]+$#','.mp3', $this->filename));
+		if(!is_dir(\Core::$ROOT.'/'.$to.'/mp3/')) {
+			mkdir(\Core::$ROOT.'/'.$to.'/mp3/', 0777, true);
 		}
+
+		exec($this->ffmpeg_path.' -i '.$this->destination.' -vn -ar 22050 -ac 2 -ab 48 -f mp3 '.\Core::$ROOT.'/'.$to.'/mp3/'.preg_replace('#\.[a-z0-9]+$#','.mp3', $this->filename));
 
 		if(in_array($options['audio_type'],['all','ogg'])) {
-			if(!is_dir(\Core::$ROOT.$to.'ogg/')) {
-				mkdir(\Core::$ROOT.$to.'ogg/', 0777, true);
+			if(!is_dir(\Core::$ROOT.'/'.$to.'/ogg/')) {
+				mkdir(\Core::$ROOT.'/'.$to.'/ogg/', 0777, true);
 			}
 
-			exec($this->ffmpeg_path.' -i '.$this->destination.' -vn -ar 22050 -ac 2 -f ogg '.\Core::$ROOT.$to.'ogg/'.preg_replace('#\.[a-z0-9]+$#','.ogg', $this->filename));
+			exec($this->ffmpeg_path.' -i '.$this->destination.' -vn -ar 22050 -ac 2 -f ogg '.\Core::$ROOT.'/'.$to.'/ogg/'.preg_replace('#\.[a-z0-9]+$#','.ogg', $this->filename));
 		}
 
-		return true;
+		return $this;
 	}
 }
