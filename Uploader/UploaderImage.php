@@ -37,6 +37,7 @@ class UploaderImage implements UploaderInterface
 		} else {
 			$this->setError('Incorrect file mime type: '.$this->img['mime']);
 		}
+
 		$this->filename = $file['file_name'];
 		$this->prop = $this->img[0]/$this->img[1];
 		if($this->prop > 5 || $this->prop < 0.2) {
