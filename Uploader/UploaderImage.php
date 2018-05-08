@@ -110,7 +110,7 @@ class UploaderImage implements UploaderInterface
 		}
 
 		$name = pathinfo($this->filename, PATHINFO_FILENAME);
-		if($this->real_ext === 'png') {
+		if($this->real_ext === 'png' && !isset($options['photo_force_jpg'])) {
 			$this->filename = $name.'.png';
 			imagepng($thumb, \Core::$ROOT.'/'.$to.'/'.$this->filename, $this->quality);
 		} else {
