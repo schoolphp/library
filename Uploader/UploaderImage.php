@@ -11,14 +11,14 @@ class UploaderImage implements UploaderInterface
 	public $quality = 80;
 
 	public function __construct($file,$options) {
-		if(isset($options['minwidth'])) {
-			$this->minwidth = $options['minwidth'];
+		if(isset($options['photo_minwidth'])) {
+			$this->minwidth = $options['photo_minwidth'];
 		}
-		if(isset($options['minheight'])) {
-			$this->minheight = $options['minheight'];
+		if(isset($options['photo_minheight'])) {
+			$this->minheight = $options['photo_minheight'];
 		}
-		if(isset($options['quality'])) {
-			$this->quality = $options['quality'];
+		if(isset($options['photo_quality'])) {
+			$this->quality = $options['photo_quality'];
 		}
 
 		$this->img = getimagesize($file['tmp_destination']);
