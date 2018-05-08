@@ -93,6 +93,7 @@ class UploaderImage implements UploaderInterface
 
 		$thumb = imagecreatetruecolor($width, $height);
 		if(in_array($this->real_ext, ['png','gif']) && !isset($options['photo_force_jpg'])) {
+			imagecolortransparent($thumb, imagecolorallocatealpha($thumb, 0, 0, 0, 127));
 			imagealphablending($thumb, false);
 			imagesavealpha($thumb, true);
 		}
