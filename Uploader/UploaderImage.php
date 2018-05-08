@@ -53,7 +53,7 @@ class UploaderImage implements UploaderInterface
 
 	public function save($to, $options = []):bool {
 		if(!is_dir(\Core::$ROOT.$to)) {
-			mkdir(\Core::$ROOT.$to, 0666, true);
+			mkdir(\Core::$ROOT.$to, 0777, true);
 		}
 
 		if(isset($options['photo_no_modify'])) {
