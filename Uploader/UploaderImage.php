@@ -9,6 +9,7 @@ class UploaderImage implements UploaderInterface
 	public $minwidth = 200;
 	public $minheight = 150;
 	public $quality = 80;
+	private $real_ext;
 
 	public function __construct($file,$options) {
 		if(isset($options['photo_minwidth'])) {
@@ -20,6 +21,8 @@ class UploaderImage implements UploaderInterface
 		if(isset($options['photo_quality'])) {
 			$this->quality = $options['photo_quality'];
 		}
+
+		$this->real_ext = $file['real_ext'];
 
 		$this->img = getimagesize($file['tmp_destination']);
 		if(in_array($file['real_ext'], ['jpg','jpeg'])) {
@@ -106,7 +109,14 @@ class UploaderImage implements UploaderInterface
 			imagecopy($thumb, $stamp, $width - $sx - $marge_right, $height - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
 		}
 
-		imagejpeg($thumb,\Core::$ROOT.'/'.$to.'/'.$this->filename, $this->quality);
+		$name = pathinfo($this->filename, PATHINFO_FILENAME);
+		if($this->real_ext === 'png') {
+			$this->filename = $name.'.png';
+			imagepng($thumb, \Core::$ROOT.'/'.$to.'/'.$this->filename, $this->quality);
+		} else {
+			$this->filename = $name.'.jpg';
+			imagejpeg($thumb, \Core::$ROOT.'/'.$to.'/'.$this->filename, $this->quality);
+		}
 		imagedestroy($thumb);
 		return $this;
 	}
