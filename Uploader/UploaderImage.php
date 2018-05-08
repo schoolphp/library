@@ -68,7 +68,7 @@ class UploaderImage implements UploaderInterface
 		}
 
 		if(isset($options['photo_no_modify'])) {
-			copy($this->destination,\Core::$ROOT.'/'.$to.$this->filename);
+			copy($this->destination,\Core::$ROOT.'/'.$to.'/'.$this->filename);
 			return $this;
 		}
 
