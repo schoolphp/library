@@ -26,7 +26,7 @@ class UploaderDoc
 
 	function save($to):bool {
 		if(!is_dir(\Core::$ROOT.$to)) {
-			mkdir(\Core::$ROOT.$to, 0664, true);
+			mkdir(\Core::$ROOT.$to, 0666, true);
 		}
 
 		copy($this->destination,\Core::$ROOT.$to.$this->filename);
