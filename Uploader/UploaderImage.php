@@ -92,6 +92,11 @@ class UploaderImage implements UploaderInterface
 		}
 
 		$thumb = imagecreatetruecolor($width, $height);
+		if(in_array($this->real_ext, ['png','gif']) && !isset($options['photo_force_jpg'])) {
+			imagealphablending($thumb, false);
+			imagesavealpha($thumb, true);
+		}
+
 		imagecopyresampled($thumb, $this->source, 0, 0, 0, 0, $width, $height, $this->img[0], $this->img[1]);
 
 		if(!empty($options['photo_watermark'])) {
@@ -108,10 +113,6 @@ class UploaderImage implements UploaderInterface
 		$name = pathinfo($this->filename, PATHINFO_FILENAME);
 		if(in_array($this->real_ext, ['png','gif']) && !isset($options['photo_force_jpg'])) {
 			$this->filename = $name.'.png';
-			if(!isset($options['photo_no_transparent'])) {
-				imagealphablending($thumb, false);
-				imagesavealpha($thumb, true);
-			}
 			imagepng($thumb, \Core::$ROOT.'/'.$to.'/'.$this->filename, $this->quality);
 		} else {
 			$this->filename = $name.'.jpg';
