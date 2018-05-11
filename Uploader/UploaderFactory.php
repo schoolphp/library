@@ -68,6 +68,7 @@ class UploaderFactory
 			'rtf' => ['application/rtf'],
 			'rar' => ['application/x-rar-compressed', 'application/octet-stream', 'application/x-rar'],
 			'zip' => ['application/zip', 'application/octet-stream'],
+			'7z' => ['application/x-7z-compressed'],
 			'gzip' => ['application/gzip'],
 			'tar' => ['application/x-tar'],
 			'ttf' => ['application/x-font-ttf'],
