@@ -23,8 +23,17 @@ class Access
 
 
 	static public function isAllowKeys($keys = [], $id = 0) {
-		if(!count($keys)) {
+		if(is_string($keys)) {
+			$keys = [$keys];
+			$count = 1;
+		} else {
+			$count = count($keys);
+		}
+
+		if(!$count) {
 			return false;
+		} elseif($count === 1 && isset(self::$allow[$id][$keys[0]])) {
+			return self::$allow[$id][$keys[0]];
 		}
 
 		if(!$id && !empty(\User::$id)) {
@@ -49,8 +58,14 @@ class Access
 			LIMIT 1
 		");
 		if($res->num_rows) {
+			if($count === 1) {
+				self::$allow[$id][$keys[0]] = true;
+			}
 			return true;
 		} else {
+			if($count === 1) {
+				self::$allow[$id][$keys[0]] = false;
+			}
 			return false;
 		}
 	}
