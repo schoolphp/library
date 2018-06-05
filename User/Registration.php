@@ -3,17 +3,17 @@ namespace FW\User;
 use \Core;
 
 class Registration {
-	public $error = '';
+	public $error = [];
 
 	function registByField($data = []):bool {
 		if(empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-			$this->error = 'Корректный e-mail является обязательным для регистрации';
+			$this->error['email'] = 'Корректный e-mail является обязательным для регистрации';
 			return false;
 		}
 
 		if(isset($data['password'])) {
 			if(mb_strlen($data['password']) < 7) {
-				$this->error = 'Вы ввели короткий пароль. Минимум 7 символов';
+				$this->error['password'] = 'Вы ввели короткий пароль. Минимум 7 символов';
 				return false;
 			}
 
@@ -26,7 +26,7 @@ class Registration {
 			WHERE `email` = '".\es($data['email'])."'
 		");
 		if($res->num_rows) {
-			$this->error = 'E-mail занят';
+			$this->error['email'] = 'E-mail занят';
 			return false;
 		}
 
@@ -49,6 +49,51 @@ class Registration {
 		");
 
 		return $this->sendActivate($id,$hash,$data['email']);
+	}
+
+	function edit(array $data, int $id):bool {
+		if(isset($data['id'])) {
+			$this->error['form'] = 'Нельзя изменять ID';
+			return false;
+		}
+
+		if(isset($data['password'])) {
+			if(mb_strlen($data['password']) < 7) {
+				$this->error['password'] = 'Вы ввели короткий пароль. Минимум 7 символов';
+				return false;
+			}
+
+			$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
+		}
+
+		if(isset($data['email'])) {
+			if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+				$this->error['email'] = 'Корректный e-mail является обязательным для регистрации';
+				return false;
+			}
+
+			$res = q("
+				SELECT 1
+				FROM `fw_users`
+				WHERE `email` = '".\es($data['email'])."'
+			");
+			if($res->num_rows) {
+				$this->error['email'] = 'E-mail занят';
+				return false;
+			}
+		}
+
+		$update = [];
+		foreach($data as $k=>$v) {
+			$update[] = "`".\es($k)."` = '".\es($v)."'";
+		}
+
+		q("
+			UPDATE `fw_users` SET
+			".implode(',',$update)."
+			WHERE `id` = ".(int)$id."
+		");
+		return true;
 	}
 
 	function regist($login,$password,$email) {
