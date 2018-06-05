@@ -44,6 +44,24 @@ class Authorization {
 			$this->errors = ['data'=>'empty-data'];
 			return false;
 		}
+
+		if(isset($data['email']) && empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+			$this->errors = ['data'=>'wrong-email'];
+			return false;
+		}
+
+		if(isset($data['password'])) {
+			if(mb_strlen($data['password']) < 7) {
+				$this->errors = ['data'=>'short-password'];
+				return false;
+			}
+
+			$tmp = password_get_info($data['password']);
+			if(!$tmp['algo']) {
+				$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
+			}
+		}
+
 		$where = [];
 		foreach($data as $k=>$v) {
 			$where[] = "`".es($k)."` = '".es($v)."'";
