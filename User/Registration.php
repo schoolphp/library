@@ -3,6 +3,39 @@ namespace FW\User;
 use \Core;
 
 class Registration {
+	public $error = '';
+
+	function registByField($data = []):bool {
+		if(empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+			$this->error = 'Корректный e-mail является обязательным для регистрации';
+			return false;
+		}
+
+		if(isset($data['password'])) {
+			$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
+		}
+
+		$insert = [];
+		foreach($data as $k=>$v) {
+			$insert[] = "`".\es($k)."` = '".\es($v)."'";
+		}
+
+		q("
+			INSERT INTO `fw_users` SET
+			".implode(',',$insert)."
+		");
+		$id = \DB::_()->insert_id;
+		$hash = md5($id.microtime(true).rand(1,1000000).(isset($data['password']) ?? time()));
+
+		q("
+			UPDATE `fw_users` SET
+			`hash` = '".es($hash)."'
+			WHERE `id` = ".$id."
+		");
+
+		return $this->sendActivate($id,$hash,$data['email']);
+	}
+
 	function regist($login,$password,$email) {
 		$pass = password_hash($password,PASSWORD_DEFAULT);
 		q("
@@ -39,7 +72,7 @@ class Registration {
 
 	function sendActivate($id,$hash,$email) {
 		try {
-			$mail = new \FW\MailProxy\MailProxy(true);
+			$mail = new \MailProxy(true);
 			$mail->Subject = 'Вы зарегистрировались на сайте '.Core::$DOMAIN;
 			$mail->addAddress($email,$email);
 			$mail->msgHTML('<div>Вы успешно зарегистрировались на сайте.</div><div>Для завершения регистрации пройдите по ссылке:<br><a href="'.Core::$DOMAIN.'/login/activate/'.$id.'/'.$hash.'">'.Core::$DOMAIN.'/login/activate/'.$id.'/'.$hash.'</a></div>');
