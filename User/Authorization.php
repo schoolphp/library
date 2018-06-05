@@ -60,6 +60,8 @@ class Authorization {
 			if(!$tmp['algo']) {
 				$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
 			}
+			$password = $data['password'];
+			unset($data['password']);
 		}
 
 		$where = [];
@@ -77,6 +79,12 @@ class Authorization {
 			return false;
 		}
 		$row = $res->fetch_assoc();
+
+		if(isset($password) && !password_verify($password, $row['password'])) {
+			$this->errors = ['password'=>'wrong-password'];
+			return false;
+		}
+
 		if($row['access'] != 1) {
 			if($row['access'] == 0) {
 				$this->errors = ['wrong-access-confirm'];
