@@ -12,7 +12,22 @@ class Registration {
 		}
 
 		if(isset($data['password'])) {
+			if(mb_strlen($data['password']) < 7) {
+				$this->error = 'Вы ввели короткий пароль. Минимум 7 символов';
+				return false;
+			}
+
 			$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
+		}
+
+		$res = q("
+			SELECT 1
+			FROM `fw_users`
+			WHERE `email` = '".\es($data['email'])."'
+		");
+		if($res->num_rows) {
+			$this->error = 'E-mail занят';
+			return false;
 		}
 
 		$insert = [];
