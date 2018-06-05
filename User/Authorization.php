@@ -56,10 +56,6 @@ class Authorization {
 				return false;
 			}
 
-			$tmp = password_get_info($data['password']);
-			if(!$tmp['algo']) {
-				$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
-			}
 			$password = $data['password'];
 			unset($data['password']);
 		}
