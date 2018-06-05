@@ -9,6 +9,8 @@ class UploaderImage implements UploaderInterface
 	public $minwidth = 200;
 	public $minheight = 150;
 	public $quality = 80;
+	public $prop_min = 0.1;
+	public $prop_max = 5;
 	private $real_ext;
 
 	public function __construct($file,$options) {
@@ -20,6 +22,12 @@ class UploaderImage implements UploaderInterface
 		}
 		if(isset($options['photo_quality'])) {
 			$this->quality = $options['photo_quality'];
+		}
+		if(isset($options['photo_prop_min'])) {
+			$this->prop_min = $options['photo_prop_min'];
+		}
+		if(isset($options['photo_prop_max'])) {
+			$this->prop_max = $options['photo_prop_max'];
 		}
 
 		$this->real_ext = $file['real_ext'];
@@ -41,7 +49,7 @@ class UploaderImage implements UploaderInterface
 		$this->destination = $file['tmp_destination'];
 
 		$this->prop = $this->img[0]/$this->img[1];
-		if($this->prop > 5 || $this->prop < 0.2) {
+		if($this->prop > $this->prop_max || $this->prop < $this->prop_min) {
 			$this->setError('Incorrect file proportion');
 		}
 
