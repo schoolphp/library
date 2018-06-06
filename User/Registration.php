@@ -57,7 +57,7 @@ class Registration {
 			return false;
 		}
 
-		if(isset($data['password'])) {
+		if(!empty($data['password'])) {
 			if(mb_strlen($data['password']) < 7) {
 				$this->error['password'] = 'Вы ввели короткий пароль. Минимум 7 символов';
 				return false;
@@ -76,6 +76,7 @@ class Registration {
 				SELECT 1
 				FROM `fw_users`
 				WHERE `email` = '".\es($data['email'])."'
+				  AND `id` <> ".(int)$id."
 			");
 			if($res->num_rows) {
 				$this->error['email'] = 'E-mail занят';
