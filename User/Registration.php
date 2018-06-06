@@ -57,13 +57,18 @@ class Registration {
 			return false;
 		}
 
-		if(!empty($data['password'])) {
-			if(mb_strlen($data['password']) < 7) {
-				$this->error['password'] = 'Вы ввели короткий пароль. Минимум 7 символов';
-				return false;
-			}
+		if(isset($data['password'])) {
+			if(!empty($data['password'])) {
+				if(mb_strlen($data['password']) < 7) {
+					$this->error['password'] = 'Вы ввели короткий пароль. Минимум 7 символов';
 
-			$data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
+					return false;
+				}
+
+				$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+			} else {
+				unset($data['password']);
+			}
 		}
 
 		if(isset($data['email'])) {
