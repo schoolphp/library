@@ -45,7 +45,7 @@ class Authorization {
 			return false;
 		}
 
-		if(isset($data['email']) && empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+		if(isset($data['email']) && (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))) {
 			$this->errors = ['data'=>'wrong-email'];
 			return false;
 		}
