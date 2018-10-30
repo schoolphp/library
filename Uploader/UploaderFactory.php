@@ -97,15 +97,16 @@ class UploaderFactory
 			'pdf' => ['application/pdf','application/acrobat', 'application/nappdf', 'application/x-pdf', 'application/vnd.pdf', 'text/pdf', 'text/x-pdf'],
 			'css' => ['text/css','application/css-stylesheet'],
 			'ico' => ['image/x-ico'],
+			'svg' => ['image/svg+xml','application/svg+xml'],
 		],
 	];
 
 
-	private $sizes = [
-		'image' => '20000000',
-		'video' => '256000000',
-		'audio' => '20000000',
-		'doc' => '100000000',
+	public $sizes = [
+		'image' => '30000000',
+		'video' => '512000000',
+		'audio' => '40000000',
+		'doc' => '512000000',
 		'application' => '100000000'
 	];
 
@@ -199,8 +200,6 @@ class UploaderFactory
 		$file['real_type'] = $tmp[0];
 
 		if(!isset($this->sizes[$file['real_type']]) || filesize($file['tmp_name']) > $this->sizes[$file['real_type']]) {
-			echo $file['real_mime_type'];
-			exit;
 			return $this->setError('File size is too large');
 		}
 		foreach($this->types as $k=>$v) {
