@@ -28,7 +28,7 @@ class Pagination {
 
 		self::$pages = ceil($row_count[0]/self::$onpage);
 
-		if(self::$curpage < 1 || self::$curpage > self::$pages) {
+		if(self::$curpage < 1 || (self::$curpage > 1 && self::$curpage > self::$pages)) {
 			header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
 			self::$curpage = 1;
 		}
