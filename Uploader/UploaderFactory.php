@@ -93,7 +93,7 @@ class UploaderFactory
 			'ttf' => ['application/x-font-ttf'],
 			'ai' => ['application/illustrator'],
 			'indd' => ['application/x-indesign'],
-			'psd' => ['application/photoshop','application/psd', 'application/x-photoshop', 'image/photoshop', 'image/psd', 'image/x-photoshop', 'image/x-psd'],
+			'psd' => ['application/photoshop','application/psd', 'application/x-photoshop', 'image/photoshop', 'image/psd', 'image/x-photoshop', 'image/x-psd', 'image/vnd.adobe.photoshop'],
 			'pdf' => ['application/pdf','application/acrobat', 'application/nappdf', 'application/x-pdf', 'application/vnd.pdf', 'text/pdf', 'text/x-pdf'],
 			'css' => ['text/css','application/css-stylesheet'],
 			'ico' => ['image/x-ico'],
