@@ -4,6 +4,7 @@ use \Core;
 
 class Registration {
 	public $error = [];
+	public $id = 0;
 
 	function registByField($data = []):bool {
 		if(empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
@@ -48,7 +49,13 @@ class Registration {
 			WHERE `id` = ".$id."
 		");
 
-		return $this->sendActivate($id,$hash,$data['email']);
+		$this->id = $id;
+
+		return true;
+
+		/* Письма лучше слать уже отдельной функцией, не стоит делать жирные классы!
+		// return $this->sendActivate($id,$hash,$data['email']);
+		*/
 	}
 
 	function edit(array $data, int $id):bool {
