@@ -5,6 +5,7 @@ use \Core;
 class Registration {
 	public $error = [];
 	public $id = 0;
+	public $hash = '';
 
 	function registByField($data = []):bool {
 		if(empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
@@ -40,16 +41,15 @@ class Registration {
 			INSERT INTO `fw_users` SET
 			".implode(',',$insert)."
 		");
-		$id = \DB::_()->insert_id;
-		$hash = md5($id.microtime(true).rand(1,1000000).(isset($data['password']) ?? time()));
+		$this->id = \DB::_()->insert_id;
+		$this->hash = md5($this->id.microtime(true).rand(1,1000000).(isset($data['password']) ?? time()));
 
 		q("
 			UPDATE `fw_users` SET
-			`hash` = '".es($hash)."'
-			WHERE `id` = ".$id."
+			`hash` = '".es($this->hash)."',
+			`auth_hash` = '".es($this->hash)."'
+			WHERE `id` = ".$this->id."
 		");
-
-		$this->id = $id;
 
 		return true;
 
