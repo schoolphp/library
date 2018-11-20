@@ -7,6 +7,7 @@ class Pagination {
 	static $pages = 1;
 	static $curpage = 1;
 	static $start = 0;
+	static $rows = 0;
 	static $options = [
 		'begin' => true,
 		'end' => true,
@@ -26,6 +27,7 @@ class Pagination {
 		$row_count = $res_count->fetch_row();
 		$res_count->close();
 
+		self::$rows = $row_count;
 		self::$pages = ceil($row_count[0]/self::$onpage);
 
 		if(self::$curpage < 1 || (self::$curpage > 1 && self::$curpage > self::$pages)) {
