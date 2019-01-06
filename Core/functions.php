@@ -58,18 +58,18 @@ function hc($el,$array = false) {
 function myAuthoload($class) {
 	$module = (isset($_GET['_module']) ? $_GET['_module'] : 'main');
 	if(strpos($class,'\\') === false) {
-		if(file_exists('./modules/'.$module.'/model/'.$class.'.php')) {
-			require_once './modules/'.$module.'/model/'.$class.'.php';
-		} elseif(file_exists('./library/'.$class.'/'.$class.'.php')) {
-			require_once './library/'.$class.'/'.$class.'.php';
+		if(file_exists(\Core::$ROOT.'/modules/'.$module.'/model/'.$class.'.php')) {
+			require_once \Core::$ROOT.'/modules/'.$module.'/model/'.$class.'.php';
+		} elseif(file_exists(\Core::$ROOT.'/library/'.$class.'/'.$class.'.php')) {
+			require_once \Core::$ROOT.'/library/'.$class.'/'.$class.'.php';
 		}
 	} else {
 		$class = str_replace('\\',DIRECTORY_SEPARATOR,$class);
 
-		if(file_exists('./modules/'.$module.'/model/'.$class.'.php')) {
-			require_once './modules/'.$module.'/model/'.$class.'.php';
-		} elseif(file_exists('./library/'.$class.'.php')) {
-			require './library/'.$class.'.php';
+		if(file_exists(\Core::$ROOT.'/modules/'.$module.'/model/'.$class.'.php')) {
+			require_once \Core::$ROOT.'/modules/'.$module.'/model/'.$class.'.php';
+		} elseif(file_exists(\Core::$ROOT.'/library/'.$class.'.php')) {
+			require \Core::$ROOT.'/library/'.$class.'.php';
 		}
 
 	}
