@@ -33,19 +33,55 @@ class UploaderImage implements UploaderInterface
 		$this->real_ext = $file['real_ext'];
 
 		$this->img = getimagesize($file['tmp_destination']);
-		if(in_array($file['real_ext'], ['jpg','jpeg'])) {
+		if (in_array($file['real_ext'], ['jpg','jpeg'])) {
 			$this->source = imagecreatefromjpeg($file['tmp_destination']);
 		} elseif($file['real_ext'] === 'png') {
 			$this->source = imagecreatefrompng($file['tmp_destination']);
 		} elseif($file['real_ext'] === 'gif') {
 			$this->source = imagecreatefromgif($file['tmp_destination']);
-		} elseif($file['real_ext'] === 'bmp') {
-			$this->source = imagecreatefrombmp($file['tmp_destination']);
-		} else {
+		} elseif(in_array($file['real_ext'], ['bmp', 'tif', 'tiff'])){
+		    try {
+                $image = new \Imagick();
+                $image->readImage($file['tmp_destination']);
+                $image->setImageFormat('jpeg');
+                $image->setImageCompression(\imagick::COMPRESSION_JPEG);
+                $image->setImageCompressionQuality(100);
+                $file['tmp_destination'] = preg_replace('#\.[a-z]+$#', '.jpg', $file['tmp_destination']);
+                $image->writeImage($file['tmp_destination']);
+                $this->source = imagecreatefromjpeg($file['tmp_destination']);
+            } catch (\Exception $e) {
+                $this->setError('Image error: '.$e->getMessage());
+            }
+        } else {
 			$this->setError('Incorrect file mime type: '.$this->img['mime']);
 		}
 
-		$this->filename = $file['file_name'];
+        if(function_exists('exif_read_data')) { // exif_imagetype проверить прежде!
+            $exif = @exif_read_data($file['tmp_destination']);
+
+            if(!empty($exif['Orientation'])) {
+                switch($exif['Orientation']) {
+                    case 8:
+                        $this->source = imagerotate($this->source,90,0);
+                        $tmp = $this->img[0];
+                        $this->img[0] = $this->img[1];
+                        $this->img[1] = $tmp;
+                        break;
+                    case 3:
+                        $this->source = imagerotate($this->source,180,0);
+                        break;
+                    case 6:
+                        $this->source = imagerotate($this->source,-90,0);
+                        $tmp = $this->img[0];
+                        $this->img[0] = $this->img[1];
+                        $this->img[1] = $tmp;
+                        break;
+                }
+            }
+        }
+
+
+        $this->filename = $file['file_name'];
 		$this->destination = $file['tmp_destination'];
 
 		$this->prop = $this->img[0]/$this->img[1];
