@@ -52,6 +52,20 @@ class UploaderImage implements UploaderInterface
             } catch (\Exception $e) {
                 $this->setError('Image error: '.$e->getMessage());
             }
+        } elseif($file['real_ext'] === 'pdf') {
+		    try {
+                $image = new \Imagick();
+                $image->setResolution(300, 300);
+                $image->readImage($file['tmp_destination'].'[0]');
+                $image->setImageFormat('jpeg');
+                $image->setImageCompression(imagick::COMPRESSION_JPEG);
+                $image->setImageCompressionQuality(100);
+                $file['tmp_destination'] = preg_replace('#\.[a-z]+$#', '.jpg', $file['tmp_destination']);
+                $image->writeImage($file['tmp_destination']);
+                $this->source = imagecreatefromjpeg($file['tmp_destination']);
+            } catch (\Exception $e) {
+                $this->setError('Image error: '.$e->getMessage());
+            }
         } else {
 			$this->setError('Incorrect file mime type: '.$this->img['mime']);
 		}

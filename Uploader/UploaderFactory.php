@@ -147,8 +147,12 @@ class UploaderFactory
 	 */
 	public function init($file, $isUpload = true, $types = [], $options = [])
 	{
-		if(count($types)) $this->setTypes($types);
-		if(isset($options['sizes'])) $this->setSizes($options['sizes']);
+		if (count($types)) $this->setTypes($types);
+		if (isset($options['sizes'])) $this->setSizes($options['sizes']);
+
+		if (isset($options['pdf2img'])) {
+		    $this->types['image']['pdf'] = ['application/pdf','application/acrobat', 'application/nappdf', 'application/x-pdf', 'application/vnd.pdf', 'text/pdf', 'text/x-pdf'];
+        }
 
 		if(!$isUpload) {
 			$file = [
